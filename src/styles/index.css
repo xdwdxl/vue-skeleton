@@ -1,0 +1,64 @@
+/**
+ * Main Style Entry
+ * @description Imports variables and sets global resets
+ */
+@import '../assets/fontawesome-pro-5.10.2-web/css/all.css';
+@import './fonts.css';
+@import './variables-skinLight.css';
+@import './variables-skinDark.css';
+@import './element-plus.css';
+@import './portal-shell.css';
+@import './dashboard.css';
+@import './notify-center.css';
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family-regular);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.btn {
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  border: 1px solid var(--btn-border-color);
+  background: var(--btn-bg-color);
+  cursor: pointer;
+  font-family: var(--font-family-regular);
+}
+
+.btn-link {
+  border: none;
+  background: transparent;
+  color: var(--btn-link-color);
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-family-regular);
+}
+.el-button {
+  border-radius: var(--radius-lg) !important;
+}

@@ -1,0 +1,29 @@
+:root {
+  --dashboard-page-padding-x: 100px;
+  --dashboard-header-padding-y: 50px;
+  --dashboard-header-title-font-size: 30px;
+  --dashboard-header-title-font-weight: 600;
+  --dashboard-grid-gap: 20px;
+  --dashboard-grid-item-height: 460px;
+
+  --dashboard-action-btn-height: 40px;
+  --dashboard-action-btn-min-width: 120px;
+  --dashboard-action-btn-padding-x: 10px;
+
+  --dashboard-offer-item-width: 320px;
+  --dashboard-offer-item-padding-x: 20px;
+  --dashboard-offer-item-padding-top: 50px;
+  --dashboard-offer-item-padding-bottom: 20px;
+  --dashboard-offer-item-gap: 50px;
+  --dashboard-offer-btn-height: 50px;
+
+  --dashboard-helpdesk-preview-size: 64px;
+  --dashboard-helpdesk-avatar-size: 28px;
+  --dashboard-helpdesk-comment-indent: 36px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --dashboard-offer-item-width: 280px;
+  }
+}

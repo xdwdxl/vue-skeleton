@@ -1,0 +1,74 @@
+{
+  "notify": {
+    "center": {
+      "button": "Benachrichtigungen",
+      "drawerTitle": "Benachrichtigungszentrale",
+      "refresh": "Aktualisieren",
+      "readAll": "Alle als gelesen markieren",
+      "empty": "Keine Benachrichtigungen",
+      "loadMore": "Mehr laden"
+    },
+    "toast": {
+      "fallbackTitle": "Benachrichtigung"
+    }
+  },
+  "youtrack": {
+    "comment": {
+      "added": {
+        "title": "Neuer Kommentar zu {issueIdReadable}",
+        "body": "{author} hat zu {issueIdReadable} kommentiert: {comment}"
+      }
+    }
+  },
+  "shell": {
+    "dashboard": "Dashboard",
+    "permissions": "Berechtigungen",
+    "logout": "Abmelden",
+    "login": "Anmelden",
+    "settings": "Einstellungen"
+  },
+  "landing": {
+    "title": "Willkommen",
+    "subtitle": "Bitte melden Sie sich an, um fortzufahren."
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Abbrechen",
+    "submit": "Senden",
+    "search": "Suchen",
+    "reload": "Neu laden",
+    "deleted": "Gelöscht",
+    "delete_failed": "Löschen fehlgeschlagen",
+    "loaded": "Geladen",
+    "load_failed": "Laden fehlgeschlagen",
+    "saved": "Gespeichert",
+    "save_failed": "Speichern fehlgeschlagen"
+  },
+  "perm": {
+    "title": "Berechtigungen",
+    "groups_roles": "Gruppen/Rollen",
+    "users": "Benutzer",
+    "application": "Anwendung",
+    "refresh": "Aktualisieren",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "role_group_name": "Gruppen-/Rollenpfad",
+    "add_group": "Gruppe hinzufügen",
+    "add_role": "Rolle hinzufügen",
+    "confirm_delete": "Möchten Sie die Gruppe \"{group}\" wirklich löschen?",
+    "delete_title": "Löschbestätigung",
+    "add": "Hinzufügen",
+    "save": "Speichern",
+    "search_placeholder": "Benutzer/Rollen suchen...",
+    "select_user": "Benutzer auswählen",
+    "select_role": "Rolle auswählen",
+    "filter_perms": "Berechtigungen filtern",
+    "unknown": "Unbekannt",
+    "user_search": "Benutzersuche",
+    "refresh_groups": "Gruppen/Rollen aktualisieren",
+    "add_group_role": "Gruppe/Rolle hinzufügen",
+    "user": "Benutzer",
+    "no_groups_assigned": "Keine Gruppen/Rollen zugewiesen.",
+    "select_user_hint": "Wählen Sie einen Benutzer aus der Liste."
+  }
+}

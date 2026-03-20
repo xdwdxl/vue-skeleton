@@ -1,0 +1,191 @@
+/**
+ * skinLight Theme Variables
+ * @description Comprehensive CSS variables for skinLight theme
+ */
+
+/* ========================================================================== */
+/* Base Variables - skinLight */
+/* ========================================================================== */
+.theme-skinLight {
+  /* --- Brand Colors --- */
+  --color-primary: #428bca;
+  --color-info: #3db8d4;
+  --color-secondary: #273542;
+  --color-success: #8cc74f;
+  --color-warning: #f0a536;
+  --color-danger: #f75d31;
+  --color-other: #479d90;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* --- Text Colors --- */
+  --color-text-primary: #428bca;
+  --color-text-title: #273542;
+  --color-text-base: #b9bec6;
+  --color-text-placeholder: #a8abb2;
+  --color-text-disabled: #c0c4cc;
+  --color-text-danger: #f75d31;
+
+  /* --- Border Colors --- */
+  --color-border-base: #b9bec6;
+  --color-border-warning: #f0a536;
+  --color-border-danger: #f75d31;
+
+  /* --- Background Colors --- */
+  --color-background-base: #ffffff;
+  --color-background-page: #f6f8fa;
+
+  /* --- Click Colors --- */
+  --default-warning: #f0a536;
+  --default-danger: #f75d31;
+  --default-success: #8cc74f;
+  --default-primary: #428bca;
+  --default-info: #3db8d4;
+  --default-default: #445d75;
+
+  --hover-warning: #d6932f;
+  --hover-danger: #de553a;
+  --hover-success: #79ad45;
+  --hover-primary: #3a79bd;
+  --hover-info: #36a1bf;
+  --hover-default: #273542;
+
+  --pressed-warning: #b87127;
+  --pressed-danger: #ca4b32;
+  --pressed-success: #5c892d;
+  --pressed-primary: #1b5797;
+  --pressed-info: #2a90ac;
+  --pressed-default: #182027;
+
+  /* --- Select Colors --- */
+  --select-color-base: #f6f8fa;
+  --select-color-hover: #d2e0ed;
+  --select-color-pressed: #c2d9ed;
+
+  /* --- Shadows --- */
+  --shadow-primary:
+    0 2px 4px rgba(66, 139, 202, 0.12), 0 0 6px rgba(66, 139, 202, 0.12);
+  --shadow-warning: 0 2px 12px 0 rgba(240, 165, 54, 0.3);
+  --shadow-danger: 0 2px 12px 0 rgba(247, 93, 49, 0.3);
+  --shadow-base: 0 4px 16px rgba(27, 87, 151, 0.15);
+
+  /* --- Typography --- */
+  --font-family:
+    OpenSans, "Open Sans", "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-family-regular: OpenSans, "Open Sans", var(--font-family);
+  --font-family-semibold:
+    OpenSans-Semibold, "Open Sans Semibold", "Open Sans", OpenSans,
+    var(--font-family);
+  --font-family-bold:
+    OpenSans-Bold, "Open Sans Bold", "Open Sans", OpenSans, var(--font-family);
+
+  --font-size-extra-large: 26px;
+  --font-size-large: 24px;
+  --font-size-medium: 22px;
+  --font-size-base: 20px;
+  --font-size-small: 18px;
+  --font-size-extra-small: 16px;
+  --font-size-mini: 14px;
+  --font-size-tiny: 13px;
+  --font-size-micro: 12px;
+
+  --font-weight-primary: 500;
+  --line-height-base: 1.5;
+  --line-height-lg: 40px;
+
+  /* --- Spacing System --- */
+  --spacing-xxs: 2px;
+  --spacing-xs: 4px;
+  --spacing-xs-plus: 6px;
+  --spacing-sm: 8px;
+  --spacing-sm-plus: 10px;
+  --spacing-sm-large: 12px;
+  --spacing-md-minus: 14px;
+  --spacing-md: 16px;
+  --spacing-md-plus: 18px;
+  --spacing-lg-minus: 20px;
+  --spacing-lg: 22px;
+  --spacing-lg-plus: 24px;
+  --spacing-xl-minus: 26px;
+  --spacing-xl: 28px;
+  --spacing-xl-plus: 30px;
+
+  /* --- Component Sizes --- */
+  --size-xxs: 10px;
+  --size-xs: 12px;
+  --size-sm: 14px;
+  --size-md: 16px;
+  --size-lg: 18px;
+  --size-xl: 20px;
+  --size-xxl: 24px;
+  --size-3xl: 28px;
+  --size-base: 12px;
+
+  /* --- Border Radius --- */
+  --radius-sm: 2px;
+  --radius-base: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-round: 20px;
+  --radius-circle: 100%;
+
+  /* --- Component Specific --- */
+  --btn-cancel-bg: var(--default-default);
+  --btn-ok-bg: var(--default-primary);
+  --btn-view-bg: var(--default-primary);
+  --btn-add-bg: var(--default-success);
+  --btn-edit-bg: var(--default-info);
+  --btn-delete-bg: var(--default-danger);
+  --btn-search-bg: var(--default-primary);
+  --btn-cancel-hover: var(--default-default);
+  --btn-ok-hover: var(--hover-primary);
+  --btn-view-hover: var(--hover-primary);
+  --btn-add-hover: var(--hover-success);
+  --btn-edit-hover: var(--hover-info);
+  --btn-delete-hover: var(--hover-danger);
+  --btn-search-hover: var(--hover-primary);
+  --btn-cancel-pressed: var(--pressed-default);
+  --btn-ok-pressed: var(--pressed-primary);
+  --btn-view-pressed: var(--pressed-primary);
+  --btn-add-pressed: var(--pressed-success);
+  --btn-edit-pressed: var(--pressed-info);
+  --btn-delete-pressed: var(--pressed-danger);
+  --btn-search-pressed: var(--pressed-primary);
+
+  --dialog-width-xl: 900px;
+  --dialog-width-lg: 840px;
+  --dialog-width-md: 800px;
+  --dialog-width-sm: 640px;
+  --dialog-width-xs: 520px;
+  --dialog-body-max-height-lg: 70vh;
+  --dialog-body-max-height-xl: 85vh;
+
+  --table-header-height: 30px;
+  --table-row-height: 30px;
+  --table-header-bg: var(--color-white);
+  --table-header-text-color: var(--color-text-title);
+  --table-body-text-color: var(--color-text-base);
+  --table-row-bg: var(--color-white);
+  --table-row-bg-striped: var(--select-color-base);
+
+  /* --- Element Plus Overrides --- */
+  --el-color-primary: var(--color-primary);
+  --el-color-success: var(--color-success);
+  --el-color-warning: var(--color-warning);
+  --el-color-danger: var(--color-danger);
+  --el-color-info: var(--color-info);
+  --el-color-white: var(--color-white);
+  --el-color-black: var(--color-black);
+
+  --el-text-color-primary: var(--color-text-primary);
+  --el-text-color-placeholder: var(--color-text-placeholder);
+  --el-text-color-disabled: var(--color-text-disabled);
+
+  --el-border-color: var(--color-border-base);
+
+  --el-border-radius-base: var(--radius-base);
+  --el-border-radius-small: var(--radius-sm);
+  --el-border-radius-round: var(--radius-round);
+  --el-border-radius-circle: var(--radius-circle);
+}

@@ -1,0 +1,52 @@
+{
+  "name": "portal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly --project tsconfig.federation.json",
+    "build:types": "vue-tsc --declaration --emitDeclarationOnly --project tsconfig.federation.json",
+    "watch": "vite build --watch",
+    "preview": "vite preview --port 5000",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx --fix",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json || npx tsc --noEmit -p tsconfig.json",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage && node fix-lcov.js"
+  },
+  "dependencies": {
+    "@fontsource/open-sans": "^5.2.7",
+    "@formkit/themes": "^1.4.0",
+    "@formkit/vue": "^1.4.0",
+    "apexcharts": "^5.10.0",
+    "axios": "^1.7.7",
+    "crypto-js": "^4.2.0",
+    "dhtmlx-gantt": "^9.1.1",
+    "element-plus": "^2.8.6",
+    "flag-icons": "^7.5.0",
+    "grid-layout-plus": "^1.1.1",
+    "pinia": "^2.2.4",
+    "vue": "^3.5.18",
+    "vue-router": "4.3.0",
+    "vue3-apexcharts": "^1.10.0"
+  },
+  "optionalDependencies": {
+    "@module-federation/vite": "^1.11.0"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@typescript-eslint/eslint-plugin": "^8.52.0",
+    "@typescript-eslint/parser": "^8.52.0",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "@vitest/coverage-v8": "^4.0.16",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^8.57.1",
+    "eslint-plugin-vue": "^10.6.2",
+    "jsdom": "^27.3.0",
+    "typescript": "^5.9.3",
+    "vite": "^5.0.0",
+    "vitest": "^4.0.16",
+    "vue-eslint-parser": "^10.2.0",
+    "vue-tsc": "2.0.29"
+  }
+}

@@ -1,0 +1,110 @@
+.el-overlay,
+.el-popover,
+.el-popper,
+.el-message,
+.el-notification,
+.el-message-box,
+.el-dialog,
+.el-drawer,
+.el-dropdown-menu,
+.el-select-dropdown,
+.el-date-picker,
+.el-picker-panel,
+.el-table,
+.el-pagination,
+.el-form,
+.el-form-item,
+.el-button,
+.el-input,
+.el-textarea,
+.el-select,
+.el-radio,
+.el-checkbox {
+  font-family: var(--el-font-family);
+  font-size: var(--el-font-size-base);
+}
+
+.el-form-item__label {
+  font-size: var(--el-font-size-small);
+  color: var(--el-text-color-primary);
+}
+
+.el-input__inner,
+.el-textarea__inner,
+.el-select__wrapper {
+  font-family: var(--el-font-family);
+  font-size: var(--el-font-size-base);
+}
+
+.el-dropdown-menu__item,
+.el-select-dropdown__item,
+.el-message__content,
+.el-notification__content,
+.el-message-box__message {
+  font-size: var(--el-font-size-base);
+}
+
+.el-message__title,
+.el-notification__title,
+.el-message-box__title,
+.el-dialog__title {
+  font-size: var(--el-font-size-small);
+  font-weight: 600;
+}
+
+.el-button.el-button--primary {
+  color: #fff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  font-size: var(--font-size-small);
+  font-weight: 400;
+  min-width: 100px;
+}
+
+.el-button.el-button--primary:not(.is-disabled):not(:disabled):hover,
+.el-button.el-button--primary:not(.is-disabled):not(:disabled):focus {
+  background: #3a79b0;
+  border-color: #3a79b0;
+  color: #fff;
+}
+
+.el-button.el-button--primary.is-disabled,
+.el-button.el-button--primary.is-disabled:hover,
+.el-button.el-button--primary.is-disabled:focus,
+.el-button.el-button--primary:disabled,
+.el-button.el-button--primary:disabled:hover,
+.el-button.el-button--primary:disabled:focus {
+  background: #a0cfff;
+  border-color: #a0cfff;
+  color: #fff;
+}
+
+.el-button.el-button--default {
+  color: var(--color-primary);
+  background: #ffffff;
+  font-size: var(--font-size-small);
+  font-weight: 400;
+  min-width: 100px;
+}
+
+.el-button.el-button--default.font-small{
+  font-size: var(--font-size-mini);
+}
+
+.el-button.el-button--default:not(.is-disabled):not(:disabled):hover,
+.el-button.el-button--default:not(.is-disabled):not(:disabled):focus {
+  background: #f6f8fa;
+  color: #488fcc;
+}
+
+.el-button.el-button--default.is-disabled,
+.el-button.el-button--default.is-disabled:hover,
+.el-button.el-button--default.is-disabled:focus,
+.el-button.el-button--default:disabled,
+.el-button.el-button--default:disabled:hover,
+.el-button.el-button--default:disabled:focus {
+  background: #ffffff;
+  color: #c7cacf;
+}
+
+

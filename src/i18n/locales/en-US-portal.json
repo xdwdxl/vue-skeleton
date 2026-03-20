@@ -1,0 +1,72 @@
+{
+  "notify": {
+    "center": {
+      "button": "Notifications",
+      "drawerTitle": "Notification Center",
+      "refresh": "Refresh",
+      "readAll": "Mark all as read",
+      "empty": "No notifications",
+      "loadMore": "Load More"
+    },
+    "toast": {
+      "fallbackTitle": "Notification"
+    }
+  },
+  "shell": {
+    "dashboard": "Dashboard",
+    "permissions": "Permissions",
+    "logout": "Logout",
+    "login": "Login",
+    "settings": "Settings"
+  },
+  "landing": {
+    "title": "Welcome",
+    "subtitle": "Please sign in to continue."
+  },
+  "remote": {
+    "loading_title": "Loading Remote...",
+    "loading_desc": "Please wait while the remote module is being loaded.",
+    "unknown_route": "Unknown remote route",
+    "load_error": "Failed to load remote module"
+  },
+  "perm": {
+    "title": "Permissions",
+    "groups_roles": "Groups/Roles",
+    "users": "Users",
+    "application": "Application",
+    "refresh": "Refresh",
+    "delete": "Delete",
+    "edit": "Edit",
+    "role_group_name": "Group/Role path",
+    "add_group": "Add Group",
+    "add_role": "Add Role",
+    "confirm_delete": "Are you sure you want to delete group \"{group}\"?",
+    "delete_title": "Delete Confirmation",
+    "add": "Add",
+    "save": "Save",
+    "search_placeholder": "Search users/roles...",
+    "select_user": "Select User",
+    "select_role": "Select Role",
+    "filter_perms": "Filter permissions",
+    "unknown": "Unknown",
+    "user_search": "User search",
+    "refresh_groups": "Refresh groups/roles",
+    "add_group_role": "Add group/role",
+    "user": "User",
+    "no_groups_assigned": "No groups/roles assigned.",
+    "select_user_hint": "Select a user from the list."
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "search": "Search",
+    "reload": "Reload",
+    "deleted": "Deleted",
+    "delete_failed": "Delete failed",
+    "loaded": "Loaded",
+    "load_failed": "Load failed",
+    "saved": "Saved",
+    "save_failed": "Save failed"
+  }
+}
