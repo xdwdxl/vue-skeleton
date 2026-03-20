@@ -1,0 +1,322 @@
+/**
+ * PortalList – Component styles
+ * @description All styles for PortalList: container, header, toolbar, table, sort indicators,
+ *   rows, checkbox, empty state, operation column, footer, and misc overrides.
+ *   Imported by PortalList.vue as an external stylesheet.
+ */
+
+/* ======================== Container ======================== */
+
+.portal-list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-size: var(--font-size-micro);
+    font-family: var(--font-family-regular);
+    color: var(--color-text-title);
+}
+
+/* ======================== Header (title + toolbar) ======================== */
+
+.portal-list__header {
+    border: 1px solid var(--color-border-base);
+    border-radius: var(--radius-base);
+    background: var(--color-background-base);
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.portal-list__title {
+    font-family: var(--font-family-bold);
+    font-weight: 700;
+    white-space: nowrap;
+    padding: var(--spacing-sm-plus);
+    border-bottom: 1px solid var(--color-border-base);
+}
+
+/* ======================== Toolbar ======================== */
+
+.portal-list__toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 0 var(--spacing-sm-plus);
+    height: var(--table-header-height);
+}
+
+.portal-list__toolbar-left,
+.portal-list__toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* ======================== Search ======================== */
+
+.portal-list__search { width: 190px; }
+
+.portal-list__search .portal-input-with-icon-wrapper { height: var(--table-header-height); }
+.portal-list__search .portal-input-icon { width: var(--table-header-height); }
+
+/* ======================== Column Dropdown ======================== */
+
+.portal-list__col-dropdown .el-dropdown-menu {
+    padding: var(--spacing-xs) 0;
+    min-width: 140px;
+    border: 1px solid var(--color-border-base);
+    border-radius: var(--radius-base);
+    background-color: var(--color-background-page);
+}
+
+.portal-list__col-dropdown .el-dropdown-menu__item {
+    font-size: var(--font-size-micro);
+    color: var(--color-text-title);
+    padding: var(--spacing-xxs) var(--spacing-sm-plus);
+    line-height: var(--line-height-base);
+}
+
+.portal-list__col-dropdown .el-checkbox__label {
+    font-size: var(--font-size-micro);
+    color: var(--color-text-title);
+    padding-left: var(--spacing-xs-plus);
+}
+
+.portal-list__reset-link {
+    border: none;
+    background: none;
+    color: var(--color-primary);
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+}
+
+.portal-list__reset-link:hover { text-decoration: underline; }
+
+/* ======================== Table ======================== */
+
+.portal-list__table-wrap { overflow: auto; }
+
+.portal-list__header + .portal-list__table-wrap .el-table {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.portal-list .el-table {
+    border: 1px solid var(--color-border-base);
+    border-radius: var(--radius-base);
+    overflow: hidden;
+    font-size: var(--font-size-micro);
+    font-family: var(--font-family-regular);
+    --el-table-border-color: var(--color-border-base);
+    --el-table-header-bg-color: var(--color-background-page);
+    --el-table-header-text-color: var(--color-text-title);
+    --el-table-text-color: var(--color-text-title);
+    --el-table-row-hover-bg-color: var(--select-color-hover);
+    --el-table-current-row-bg-color: var(--select-color-pressed);
+    background-color: var(--color-background-base);
+}
+
+.portal-list__table-wrap--has-footer .el-table {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: none;
+}
+
+/* ======================== Header Cells ======================== */
+
+.portal-list .el-table th.el-table__cell {
+    background-color: var(--color-background-base) !important;
+    height: var(--table-header-height);
+    padding: 0;
+    font-family: var(--font-family-bold);
+    font-weight: 700;
+    font-size: var(--font-size-micro);
+    color: var(--color-text-title);
+    border-bottom: 1px solid var(--color-border-base);
+}
+
+.portal-list .el-table .el-table__header-wrapper th .cell {
+    padding: 0 var(--spacing-md);
+    line-height: var(--table-header-height);
+    white-space: nowrap;
+}
+
+/* Hide sort carets by default */
+.portal-list .el-table th.el-table__cell .caret-wrapper { display: none; }
+
+/* ======================== Active Sort Column Indicator ======================== */
+
+.portal-list .el-table th.ascending .cell,
+.portal-list .el-table th.descending .cell {
+    border: 1px solid var(--color-border-base);
+    border-radius: var(--radius-base);
+    background-color: var(--color-background-page);
+    margin: var(--spacing-xxs) 0 var(--spacing-xxs) var(--spacing-sm-plus);
+    padding: 0 var(--spacing-xs);
+    height: var(--size-xxl);
+    line-height: var(--size-xxl);
+    display: flex;
+    align-items: center;
+}
+
+.portal-list .el-table th.ascending .sort-caret,
+.portal-list .el-table th.descending .sort-caret {
+    display: none;
+}
+
+.portal-list .el-table th.ascending .caret-wrapper,
+.portal-list .el-table th.descending .caret-wrapper {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
+    height: auto;
+    width: auto;
+    margin-left: var(--spacing-xs);
+}
+
+/* Sort icon (descending bars) */
+.portal-list .el-table th.ascending .caret-wrapper::before,
+.portal-list .el-table th.descending .caret-wrapper::before {
+    content: '';
+    display: block;
+    width: var(--font-size-micro);
+    height: var(--size-xxs);
+    flex-shrink: 0;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Crect y='0' width='12' height='2' rx='0.5'/%3E%3Crect y='4' width='8' height='2' rx='0.5'/%3E%3Crect y='8' width='4' height='2' rx='0.5'/%3E%3C/svg%3E") no-repeat center;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Crect y='0' width='12' height='2' rx='0.5'/%3E%3Crect y='4' width='8' height='2' rx='0.5'/%3E%3Crect y='8' width='4' height='2' rx='0.5'/%3E%3C/svg%3E") no-repeat center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    background-color: var(--color-text-default);
+}
+
+/* Dropdown arrow (pushed to right end) */
+.portal-list .el-table th.ascending .caret-wrapper::after,
+.portal-list .el-table th.descending .caret-wrapper::after {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 0;
+    height: 0;
+    margin-left: auto;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid var(--color-text-default);
+}
+
+/* ======================== Body Rows ======================== */
+
+.portal-list .el-table__body tr.el-table__row:nth-child(odd) td.el-table__cell {
+    background-color: var(--color-background-base);
+}
+
+.portal-list .el-table__body tr.el-table__row:nth-child(even) td.el-table__cell {
+    background-color: var(--color-background-page);
+}
+
+/* Hover row */
+.portal-list .el-table__body tr.el-table__row:hover > td.el-table__cell {
+    background-color: var(--select-color-hover) !important;
+}
+
+/* Selected (current) row — 3px left primary indicator + pressed background */
+.portal-list .el-table__body tr.current-row > td.el-table__cell {
+    background-color: var(--select-color-pressed) !important;
+}
+
+.portal-list .el-table__body tr.current-row > td.el-table__cell:first-child {
+    box-shadow: inset 3px 0 0 0 var(--color-primary);
+}
+
+.portal-list .el-table td.el-table__cell {
+    height: var(--table-row-height);
+    padding: 0;
+    border-bottom: none;
+}
+
+.portal-list .el-table .el-table__body-wrapper td .cell {
+    padding: 0 var(--spacing-md);
+    line-height: var(--table-row-height);
+    white-space: nowrap;
+}
+
+/* Hide default el-table border lines */
+.portal-list .el-table__inner-wrapper::before,
+.portal-list .el-table::before,
+.portal-list .el-table::after,
+.portal-list .el-table .el-table__border-left-patch {
+    display: none;
+}
+
+/* Stripe override */
+.portal-list .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+    background-color: var(--color-background-page);
+}
+
+/* ======================== Checkbox ======================== */
+
+.portal-list .el-checkbox__inner {
+    width: var(--size-sm);
+    height: var(--size-sm);
+    border-radius: var(--radius-sm);
+    border-color: var(--color-border-base);
+}
+
+.portal-list .el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* ======================== Empty State ======================== */
+
+.portal-list .el-table__empty-block { min-height: var(--line-height-lg); }
+
+.portal-list .el-table__empty-text {
+    font-size: var(--font-size-micro);
+    color: var(--color-text-base);
+    line-height: var(--line-height-lg);
+}
+
+/* ======================== Operation Column ======================== */
+
+.portal-list__row-ops {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    height: 100%;
+}
+
+/* ======================== Footer ======================== */
+
+.portal-list__footer {
+    border: 1px solid var(--color-border-base);
+    border-top: none;
+    border-radius: 0 0 var(--radius-base) var(--radius-base);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--spacing-sm-plus);
+    background: var(--color-background-base);
+    min-height: var(--line-height-lg);
+}
+
+.portal-list__footer-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
+}
+
+.portal-list__footer .portal-paging {
+    padding: var(--spacing-xs-plus) 0;
+}
+
+/* ======================== Misc Overrides ======================== */
+
+.portal-list__table-wrap .el-input__wrapper { box-shadow: none !important; }
+.portal-list .el-form-item { margin-bottom: 0; margin-right: 0; }
+.portal-list .el-loading-mask { border-radius: var(--radius-base); }

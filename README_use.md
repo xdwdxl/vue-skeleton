@@ -1,58 +1,67 @@
-# Portal Frontend (Components & Integration Guide)
+# Portal Integration Guide
 
-This README reflects the "current implementation". It organizes the capabilities exposed by the Portal frontend and maps them to the corresponding backend implementation (`e:\realcids\portal\backend`): what these modules can do, what the final results are, and what their features are.
-
----
-
-## 1. What can be achieved
-
-As a "Basic Capability Platform" for Host + Remote, Portal packages a set of reusable capabilities (styles, runtime configuration, authentication, HTTP, message bus, notifications, i18n, storage, audit, error handling, external relay, etc.) into remote modules. Remote applications (such as dashboards) can obtain them by importing on demand:
-
-- **Unified UI Basic Capabilities**: CSS Variables / Theme (including Element Plus variable mapping), general dialogs, icons, cards, etc.
-- **Unified Runtime Configuration**: Pull `portal-runtime.json` / `mf-registry.json`, etc. from the backend configuration center to achieve "configuration changes without release".
-- **Unified Authentication & Session**: Keycloak via BFF (refresh token HttpOnly cookie), frontend only holds memory access token, automatic 401 refresh and retry.
-- **Unified Message Channel**: Local/Cross-Tab (BroadcastChannel / localStorage) + Backend SSE "Bus" model, decoupling module interactions.
-- **Unified Notification Center**: Inbox + Unread Count + SSE Real-time Push + Action Registry + Pending Action Replay.
-- **Unified Observability**: HTTP metrics + audit event queue + unified error reporting strategy (`system.error`).
-- **Unified Configuration/Resource Hot Update**: Config SSE (`/api/config/events`) triggers frontend module hot refresh (theme / storage policy / i18n, etc.).
+This document explains how remote applications integrate with Portal's shared capabilities via Module Federation. It covers all exposed modules, their features, recommended usage patterns, and the frontend-backend correspondence.
 
 ---
 
-## 2. Remote Modules Exposed (Aligned with `vite.config.js`)
+## 1. Overview
 
-The remote modules exposed by Portal via Module Federation (Import Path → Implementation File) are as follows (based on `e:\realcids\portal\frontend\portal\vite.config.js`):
+Portal serves as a **unified capability platform** for a micro-frontend architecture. It packages reusable infrastructure (authentication, HTTP, message bus, notifications, i18n, storage, audit, error handling, theming) into Module Federation remotes that any consumer application can import on demand.
 
-| Import Path | Exposed Module | Implementation Entry |
+### Key Capabilities
+
+- **Unified Theming** — CSS variables, Element Plus overrides, dark/light skin switching
+- **Unified Runtime Configuration** — Pull `portal-runtime.json` from backend config center; changes take effect without redeployment
+- **Unified Authentication** — Keycloak via BFF pattern; refresh token in HttpOnly cookie, access token in memory only; automatic 401 refresh and retry
+- **Unified Message Bus** — Local pub/sub + cross-tab sync (BroadcastChannel) + backend SSE bridge
+- **Unified Notification Center** — Inbox, unread count, SSE real-time push, action registry with pending replay
+- **Unified Observability** — HTTP metrics, audit event queue, error reporting via `system.error` bus topic
+- **Unified Hot Updates** — Config SSE (`/api/config/events`) triggers frontend hot refresh for theme, storage policy, and i18n
+
+---
+
+## 2. Exposed Remote Modules
+
+All modules listed below are exposed via Module Federation. Import them as `portal/<module>`.
+
+| Import Path | Implementation | Description |
 |---|---|---|
-| `portal/bootstrap` | Startup entry when Portal is used as a remote | `src/main.ts` |
-| `portal/runtime` | Runtime initialization (styles/manifest/auth/SSE) | `src/runtime.ts` |
-| `portal/theme` | Theme Manager (Configuration Driven) | `src/theme/index.ts` |
-| `portal/styles` | CSS Variables (for remote apps) | `src/styles/variables.css` |
-| `portal/http` | Axios instance + helpers | `src/http/api.ts` |
-| `portal/api` | Portal API encapsulation (Business/Platform interfaces) | `src/api/index.ts` |
-| `portal/i18n` | i18n (Manager/Plugin/composable) | `src/i18n/index.ts` |
-| `portal/storage` | Scoped storage + Vue binding | `src/storage/index.ts` |
-| `portal/error` | Unified Error Center Entry | `src/error/index.ts` |
-| `portal/audit` | AuditClient (Queue and flush) | `src/audit/client.ts` |
-| `portal/formkit` | FormKit Integration Encapsulation | `src/formkit/index.ts` |
-| `portal/regionalization` | Number/Time/Currency Formatting | `src/regionalization/index.ts` |
-| `portal/gantt` | Gantt related encapsulation | `src/gantt/index.ts` |
-| `portal/dialog` | Dialog component export | `src/dialog/index.ts` |
-| `portal/BaseDialog` | BaseDialog component | `src/dialog/BaseDialog.vue` |
-| `portal/FormDialog` | FormDialog component | `src/dialog/FormDialog.vue` |
-| `portal/CidsCard` | CidsCard component | `src/components/CidsCard.vue` |
-| `portal/PortalIcon` | PortalIcon component | `src/components/PortalIcon.vue` |
+| `portal/bootstrap` | `src/main.ts` | Full app bootstrap (when Portal is loaded as a remote) |
+| `portal/runtime` | `src/runtime.ts` | Runtime initialization (styles, manifest, auth, SSE) |
+| `portal/theme` | `src/theme/index.ts` | Theme manager (config-driven skin switching) |
+| `portal/styles` | `src/styles/variables.css` | CSS variables for remote apps |
+| `portal/http` | `src/http/api.ts` | Axios instance with full interceptor stack |
+| `portal/api` | `src/api/index.ts` | Portal business API client |
+| `portal/i18n` | `src/i18n/index.ts` | i18n manager, Vue plugin, and composables |
+| `portal/storage` | `src/storage/index.ts` | Scoped storage with Vue reactivity |
+| `portal/error` | `src/error/index.ts` | Unified error center |
+| `portal/audit` | `src/audit/client.ts` | Audit event queue (batch flush) |
+| `portal/regionalization` | `src/regionalization/index.ts` | Number/date/currency locale formatting |
+| `portal/gantt` | `src/gantt/index.ts` | Gantt chart wrapper (dhtmlx-gantt) |
+| `portal/dialog` | `src/dialog/index.ts` | Dialog component collection |
+| `portal/BaseDialog` | `src/dialog/BaseDialog.vue` | Base dialog component |
+| `portal/FormDialog` | `src/dialog/FormDialog.vue` | Form dialog component |
+| `portal/PortalIcon` | `src/components/PortalIcon.vue` | Icon component (FontAwesome + SVG) |
+| `portal/PortalTable` | `src/components/PortalTable.vue` | Table component |
+| `portal/PortalTableColumn` | `src/components/PortalTableColumn.ts` | Table column definition |
+| `portal/notify` | `src/notify/index.ts` | Notification center |
+| `portal/dashboard-styles` | `src/styles/dashboard.css` | Dashboard-specific styles |
 
-Note:
+### Global Objects
 
-- The global style entry for Portal is `src/styles/index.css`. Remote applications usually only need `portal/styles` (variables) + their own business styles; Portal Host will load the full styles itself.
-- The runtime will mount on `window`: `__PORTAL_RUNTIME__` (configuration), `__CIDS_BUS__` (bus), `__PORTAL_AUTH__` (token access bridge provided for host/remote).
+Portal runtime mounts the following on `window`:
+
+| Global | Purpose |
+|---|---|
+| `__PORTAL_RUNTIME__` | Runtime configuration object |
+| `__CIDS_BUS__` | Message bus instance |
+| `__PORTAL_AUTH__` | Auth bridge (`getToken` / `refreshToken`) for host and remotes |
 
 ---
 
-## 3. Recommended Integration Path (Remote Application)
+## 3. Integration Patterns
 
-### 3.1 Minimum Available (Only Styles + Runtime)
+### 3.1 Minimal Setup (Styles + Runtime Only)
 
 ```ts
 import 'portal/styles'
@@ -61,7 +70,9 @@ import { initPortalRuntime } from 'portal/runtime'
 await initPortalRuntime()
 ```
 
-### 3.2 Common Scenarios (Need Notification SSE)
+This loads Portal CSS variables and initializes runtime configuration. Sufficient for apps that only need theming and config.
+
+### 3.2 Standard Setup (With Notification SSE)
 
 ```ts
 import 'portal/styles'
@@ -70,148 +81,184 @@ import { initPortalRuntime } from 'portal/runtime'
 await initPortalRuntime({ enableNotifySse: true })
 ```
 
-### 3.3 Get Message Bus (Shared by Host/Remote)
+Enables real-time notification push in addition to the minimal setup.
+
+### 3.3 Using the Message Bus
+
+The bus is available globally after runtime initialization:
 
 ```ts
 const bus = (window as any).__CIDS_BUS__
+
+// Publish events
 bus.publish('i18n.locale.sync', { locale: 'en-US' })
+
+// Subscribe to events (supports * wildcard suffix)
+bus.subscribe('config.*', (topic, payload) => {
+  console.log(topic, payload)
+})
+
+// Request-reply pattern
+const response = await bus.request('some.topic', { data: 'value' })
+```
+
+### 3.4 Using the HTTP Client
+
+```ts
+import { http } from 'portal/http'
+
+// Automatic auth headers, request-id, retry, ETag caching
+const data = await http.get('/api/some-endpoint')
+```
+
+### 3.5 Using Storage
+
+```ts
+import { storage } from 'portal/storage'
+
+// Scoped to global / user / project
+storage.set('my-key', value, { scope: 'user' })
+const value = storage.get('my-key', { scope: 'user' })
+```
+
+### 3.6 Using Notifications
+
+```ts
+import { registerNotifyAction } from 'portal/notify'
+
+// Register a business action handler for notification items
+registerNotifyAction('my-action-type', async (notification) => {
+  // Handle the notification action
+})
 ```
 
 ---
 
-## 4. Frontend-Backend Correspondence (Key Capabilities Overview)
+## 4. Frontend-Backend Correspondence
 
-| Capability | Frontend Implementation (Entry) | Backend Implementation (Entry) | Main Effect/Feature |
+| Capability | Frontend Entry | Backend Controller | Description |
 |---|---|---|---|
-| Config BFF + ETag + SSE | `src/runtime.ts` / `src/bus/index.ts` / `src/api/index.ts` | `com.cids.baseplate.controller.ConfigController` | Config read caching, ETag 304, SSE broadcast `config.updated` / `i18n.updated`; sensitive fields removed when returning runtime |
-| Auth BFF (Keycloak) | `src/http/auth.ts` / `src/http/interceptors.ts` / `src/api/index.ts` | `com.cids.baseplate.auth.controller.AuthController` | 401 auto refresh, refresh token HttpOnly cookie, supports token exchange (app-token) |
-| Permission (Perm) | `src/api/index.ts` + Portal internal pages/routes | `com.cids.baseplate.perm.controller.PermController` | `perm/me`, permission directory, admin group/user management, etc. |
-| Notification Center (notify) + SSE | `src/notify/*` + `src/runtime.ts` | `com.cids.baseplate.controller.NotifyController` | Inbox/Unread count/Read marker, SSE ticket mode, optional Redis cross-instance delivery, Rabbit exchange |
-| i18n Management & Hot Update | `src/i18n/*` + `src/bus/*` | `com.cids.baseplate.controller.I18nController` + `ConfigController` | Store language packs via config center, supports list/import/publish; Config SSE pushes `i18n.updated` |
-| Scoped storage (including policy hot update) | `src/storage/*` | `ConfigController` (Read Policy JSON) | Storage policy driven by config center, auto hot load after update; Cross-Tab sync |
-| HTTP Unified Layer (metrics/audit/error) | `src/http/*` + `src/cache/*` | `AuditController` (Audit Write) + Business Interface | Auto add request-id, language/timezone/currency header, 401/500 retry, ETag 304 reuse, bus reports `system.error` / `metrics.http` |
-| Audit Queue (Frontend) | `src/audit/client.ts` | `com.cids.baseplate.audit.controller.AuditController` | Batch storage, queue persistence and scheduled flush, can be triggered via bus |
-| User/Group Settings | `src/api/index.ts` | `UserSettingController` / `GroupSettingController` | General K/V settings; Admins can operate on behalf; Group settings with admin auth |
-| Dashboard Layout Storage | `src/api/index.ts` | `DashboardLayoutController` | Supports user/group layout read and save, only admins can modify group layouts |
-| Relay (BFF Forwarding) | `src/api/index.ts` | `RelayController` | Unified external call entry, controllable forwarding, supports upload; returns `X-Relay: 1` marker |
-| YouTrack OAuth BFF | `src/api/index.ts` | `YouTrackOAuthController` | Auth code exchange for token + refresh cookie, avoids frontend storing refresh token |
+| Config + ETag + SSE | `src/runtime.ts`, `src/bus/index.ts`, `src/api/index.ts` | `ConfigController` | Config reading with ETag 304 caching; SSE broadcasts `config.updated` / `i18n.updated` |
+| Auth (Keycloak BFF) | `src/http/auth.ts`, `src/http/interceptors.ts` | `AuthController` | 401 auto-refresh; HttpOnly refresh cookie; token exchange support |
+| Permissions | `src/api/index.ts`, `src/perm/utils.ts` | `PermController` | `perm/me` endpoint; permission directory; admin group/user management |
+| Notifications + SSE | `src/notify/*`, `src/runtime.ts` | `NotifyController` | Inbox, unread count, read markers; SSE ticket mode; optional Redis cross-instance delivery |
+| i18n Management | `src/i18n/*`, `src/bus/*` | `I18nController`, `ConfigController` | Language pack list/import/publish; Config SSE pushes `i18n.updated` for hot reload |
+| Scoped Storage | `src/storage/*` | `ConfigController` | Policy driven by config center (`portal.storage.policy.json`); hot-reloads on update; cross-tab sync |
+| HTTP Layer | `src/http/*`, `src/cache/*` | Business APIs, `AuditController` | Auto request-id, locale headers; 401/500 retry; ETag caching; bus reports `system.error` / `metrics.http` |
+| Audit Queue | `src/audit/client.ts` | `AuditController` | Batch flush; queue persistence in storage; triggered via bus (`audit.event`, `audit.flush`) |
+| User/Group Settings | `src/api/index.ts` | `UserSettingController`, `GroupSettingController` | Key-value settings; admin delegation; group settings with authorization |
+| Dashboard Layouts | `src/api/index.ts` | `DashboardLayoutController` | User/group layout CRUD; only admins can modify group layouts |
+| Relay (BFF Proxy) | `src/api/index.ts` | `RelayController` | Unified external call forwarding; supports file upload; returns `X-Relay: 1` header |
+| YouTrack OAuth | `src/api/index.ts` | `YouTrackOAuthController` | Auth code → token exchange; refresh cookie avoids frontend token storage |
 
 ---
 
-## 5. Key Module Explanation (Implementation Details & Usage)
+## 5. Module Details
 
-### 5.1 runtime (`portal/runtime`)
+### 5.1 Runtime (`portal/runtime`)
 
-Implementation: `src/runtime.ts`
+**Entry:** `src/runtime.ts`
 
-- Responsible for loading Portal global styles (`src/styles/index.css`).
-- Pulls and caches `portal-runtime.json` (`/api/config/{dataId}?group=...`), and mounts it to `window.__PORTAL_RUNTIME__`.
-- Loads MF manifest (default from runtime config or `mf-registry.json`) and writes to `window.__MF_MANIFEST__`.
-- Initializes `window.__PORTAL_AUTH__` (`getToken` / `refreshToken`), for host/remote to unify token acquisition.
-- Optionally enables notify SSE (gets ticket via `/api/notify/sse-ticket`, and connects to `/api/notify/events`).
+Responsibilities:
+1. Loads Portal global styles (`src/styles/index.css`)
+2. Fetches and caches `portal-runtime.json` via `/api/config/{dataId}?group=...`; mounts to `window.__PORTAL_RUNTIME__`
+3. Loads MF manifest (from runtime config or `mf-registry.json`); writes to `window.__MF_MANIFEST__`
+4. Initializes `window.__PORTAL_AUTH__` with `getToken()` and `refreshToken()` methods
+5. Optionally enables notification SSE (ticket via `/api/notify/sse-ticket`, stream from `/api/notify/events`)
 
-Backend Correspondence:
+### 5.2 Message Bus (`window.__CIDS_BUS__`)
 
-- Runtime config read/push: `/api/config/*` → `ConfigController`
-- Notify SSE: `/api/notify/*` → `NotifyController`
+**Entry:** `src/bus/core.ts` + `src/bus/index.ts`
 
-### 5.2 bus (`window.__CIDS_BUS__`)
+API: `publish` / `subscribe` / `once` / `unsubscribe` / `request` / `reply`
 
-Implementation: `src/bus/core.ts` + `src/bus/index.ts`
+Features:
+- Wildcard subscriptions with `*` suffix (e.g., `user.*`)
+- Cross-tab broadcast via BroadcastChannel (falls back to localStorage)
+- SSE bridge connects to `/api/config/events`, converts backend events to bus topics (`config.updated`, `i18n.updated`)
 
-- publish/subscribe/once/unsubscribe/request/reply.
-- Only supports `*` suffix wildcard (e.g., `user.*`).
-- Broadcast: BroadcastChannel (degrades to localStorage if unavailable) for Cross-Tab/App sync.
-- SSE bridge: `src/bus/index.ts` connects to `/api/config/events` by default, converts backend events to bus topics (e.g., `config.updated`, `i18n.updated`).
+### 5.3 HTTP Client (`portal/http`)
 
-Backend Correspondence:
+**Entry:** `src/http/api.ts` + `src/http/interceptors.ts` + `src/cache/interceptors.ts`
 
-- `GET /api/config/events` → `ConfigController.events()`
+Features:
+- Auto-injects headers: `X-Request-Id`, `X-App-Id`, `Accept-Language`, `X-Timezone`, `X-Currency`
+- In-memory access token; 401 triggers automatic refresh via `/api/auth/refresh` and retries once
+- 500 responses trigger delayed retry (configurable)
+- BFF response envelope (`{ success, code, message, data }`) auto-unpacked
+- GET requests use ETag caching by default; 304 responses serve from memory cache (key includes locale, timezone, currency, user, params)
+- Reports `metrics.http` and `system.error` via bus
 
-### 5.3 http (`portal/http`)
+### 5.4 Error Center (`portal/error`)
 
-Implementation: `src/http/api.ts` + `src/http/interceptors.ts` + `src/cache/interceptors.ts`
+**Entry:** `src/error/index.ts` + `src/error/center.ts`
 
-Features (Externally perceptible behavior):
+Subscribes to `system.error` on the bus. Applies deduplication and configurable display strategies:
+- `toast` — brief notification
+- `notification` — persistent notification
+- `dialog` — modal error dialog
+- `none` — silent (logging only)
 
-- Automatically injects `X-Request-Id`, `X-App-Id`, `Accept-Language`, `X-Timezone`, `X-Currency`.
-- Access token exists only in memory, 401 automatically refreshes (BFF `/api/auth/refresh`) and retries once.
-- 500 automatically delays and retries once (configurable).
-- Business layer BFF envelope (`{ success, code, message, data }`) unified unpacking and error reporting.
-- GET enables ETag caching by default: Reuses memory cache data on 304 (key includes language/timezone/currency/user/params).
-- Unified reporting: HTTP metrics and errors are published via bus (`metrics.http` / `system.error`).
+Accepts errors from HTTP layer, business code, and `window.onerror`.
 
-Backend Correspondence (Related to Auth):
+### 5.5 Storage (`portal/storage`)
 
-- `POST /api/auth/refresh` / `POST /api/auth/token` / `POST /api/auth/logout` / `GET /api/auth/me` → `AuthController`
+**Entry:** `src/storage/manager.ts`
 
-### 5.4 error (`portal/error`)
-
-Implementation: `src/error/index.ts` + `src/error/center.ts`
-
-- Subscribes to `system.error` on bus, performs unified deduplication and display strategy (toast/notification/dialog/none).
-- Compatible with entering the same error center from HTTP layer, business layer, window error, etc.
-
-### 5.5 storage (`portal/storage`)
-
-Implementation: `src/storage/manager.ts`
-
-- Scope: `global/user/project` (Default policy decides whether to use memory or localStorage).
-- TTL and serialization policies are issued by the configuration center: `portal.storage.policy.json` (`PORTAL_GROUP`).
-- Listens to `config.updated`, hot loads when the policy file is updated.
-- Publishes `storage.updated` on every write, and synchronizes across Tabs (`StorageSync`).
-
-Backend Correspondence:
-
-- `GET /api/config/portal.storage.policy.json?group=PORTAL_GROUP` → `ConfigController`
+Features:
+- Three scopes: `global`, `user`, `project`
+- Default policy determines driver (memory or localStorage)
+- TTL and serialization policies from config center (`portal.storage.policy.json` in `PORTAL_GROUP`)
+- Listens to `config.updated`; hot-reloads policy when updated
+- Publishes `storage.updated` on writes; cross-tab sync via `StorageSync`
+- Vue composable: `useStorage()` for reactive bindings
 
 ### 5.6 i18n (`portal/i18n`)
 
-Implementation: `src/i18n/manager.ts` + `src/i18n/vue.ts`
+**Entry:** `src/i18n/manager.ts` + `src/i18n/vue.ts`
 
-- Locale is persisted in user storage (default key: `i18n.locale`), and can be synchronized across apps via bus (`i18n.locale.sync`).
-- Can trigger reload when `i18n.updated` is received via Config SSE (implementation depends on Manager internals).
-- Management Interface: Supports list/export/import/publish (for operations/management side to maintain language packs).
+Features:
+- Locale persisted in user storage (default key: `i18n.locale`)
+- Cross-app locale sync via bus topic `i18n.locale.sync`
+- Hot-reload on `i18n.updated` from Config SSE
+- Management API: list, export, import, publish language packs
 
-Backend Correspondence:
+### 5.7 Notification Center (`portal/notify`)
 
-- `GET/POST /admin/i18n/*` → `I18nController`
-- `GET /api/config/events` pushes `i18n.updated` → `ConfigController`
+**Entry:** `src/notify/NotifyCenter.vue` + `src/notify/useNotifyCenter.ts`
 
-### 5.7 notify (Notification Center)
+Features:
+- Badge with unread count + drawer inbox + detail dialog
+- Action system: notification items carry `__actions`; remote apps register handlers via `registerNotifyAction(type, handler)`
+- Supports pending action replay for late-registered handlers
+- Unread count synced via bus topic `notify.unread.count.changed`
 
-Implementation: `src/notify/NotifyCenter.vue` + `src/notify/useNotifyCenter.ts`
+Backend endpoints:
+- `GET /api/notify/inbox` — fetch inbox
+- `POST /api/notify/read` / `POST /api/notify/read-all` — mark as read
+- `POST /api/notify/sse-ticket` + `GET /api/notify/events` — SSE (ticket mode)
+- `GET /api/notify/broadcast` / `POST /api/notify/admin/send` — broadcast and admin send
 
-What it can do:
+### 5.8 Audit (`portal/audit`)
 
-- Unified Notification UI: Badge unread count + Drawer inbox + Detail dialog.
-- "Action System": Notification items can carry `__actions`, remote applications register business actions via `registerNotifyAction(type, handler)` (supports pending replay).
-- Unread count synchronized via bus topic `notify.unread.count.changed`.
+**Entry:** `src/audit/client.ts`
 
-Backend Correspondence (Interface and SSE):
+Features:
+- Frontend event queue with scheduled batch flush
+- Flush on page hide/unload to avoid event loss
+- Queue persisted in user storage (default key: `audit.queue`)
+- Bus interaction: `audit.event` (enqueue), `audit.flush` (trigger flush), `audit.status` (query)
 
-- `GET /api/notify/inbox` → Pull inbox
-- `POST /api/notify/read` / `POST /api/notify/read-all` → Read marker
-- `POST /api/notify/sse-ticket` + `GET /api/notify/events` → Personal SSE (ticket mode)
-- `GET /api/notify/broadcast` / `POST /api/notify/admin/send` → Broadcast and management sending
-
-### 5.8 audit (`portal/audit`)
-
-Implementation: `src/audit/client.ts`
-
-- Frontend queue, scheduled flush, flush on hide/leave page.
-- Queue persistence in user storage (default key: `audit.queue`), avoids losing events on refresh.
-- Bus interaction: `audit.event` (write), `audit.flush` (request trigger), `audit.status` (query).
-
-Backend Correspondence:
-
-- `POST /api/audit/events` (Batch write, queue rate limiting)
+Backend endpoints:
+- `POST /api/audit/events` — batch write
 - `GET /api/audit/status` / `GET /api/audit/events` / `POST /api/audit/export`
 
 ---
 
-## 6. Common Questions (Implementation Constraints)
+## 6. Integration Guidelines
 
-- Remote applications should only rely on exposed modules (Table in Section 2), and should not directly reference Portal internal pages/route files.
-- If you need to access Notification SSE, it is recommended to initialize uniformly via `initPortalRuntime({ enableNotifySse: true })` instead of creating SSE yourself.
-- When cross-Tab synchronization is needed, prioritize bus events (such as locale, unread count, storage.updated) to avoid direct coupling with storage.
+1. **Only import exposed modules** listed in section 2. Do not directly reference Portal internal pages, routes, or private files.
+2. **Use `initPortalRuntime()` for SSE** — do not create SSE connections manually. Use `initPortalRuntime({ enableNotifySse: true })` for notification streams.
+3. **Prefer bus events for cross-tab sync** — use bus topics (`i18n.locale.sync`, `notify.unread.count.changed`, `storage.updated`) instead of coupling directly to storage or DOM events.
+4. **Shared dependencies** — Vue and Vue Router are configured as singletons in Module Federation. Remote apps must use compatible versions (`vue ^3.5`, `vue-router ^5`).
+5. **Styles** — Remote apps typically only need `portal/styles` (CSS variables). The Portal host loads full styles (`src/styles/index.css`) itself.

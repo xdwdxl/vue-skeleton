@@ -16,11 +16,10 @@ import '@fontsource/open-sans/500.css'
 import '@fontsource/open-sans/600.css'
 import '@fontsource/open-sans/700.css'
 import 'flag-icons/css/flag-icons.min.css'
-import '@formkit/themes/genesis'
+import 'virtual:svg-icons-register'
 import './styles/index.css'
 import './theme'
 import './audit'
-import { plugin } from '@formkit/vue'
 import * as VueModule from 'vue'
 import * as VueRouterModule from 'vue-router'
 import bus from './bus'
@@ -48,9 +47,8 @@ if (typeof window !== 'undefined' && window.crypto && !window.crypto.randomUUID)
   },
 }
 import { I18nPlugin } from './i18n'
-import { getFormKitConfig } from './formkit'
-import CidsCard from './components/CidsCard.vue'
 import PortalIcon from './components/PortalIcon.vue'
+import PortalSvgIcon from './components/PortalSvgIcon.vue'
 
 function getQueryParam(key: string): string | null {
   try { return new URLSearchParams(window.location.search).get(key) } catch { return null }
@@ -310,13 +308,7 @@ function setupBridges(app: VueApp, router: Router) {
     } catch {}
   })
 
-  bus.subscribe('i18n.locale.changed', (msg) => {
-    try {
-      const next = safeString(((msg?.payload ?? {}) as Record<string, unknown>).locale)
-      const localeKey = next.startsWith('de') ? 'de' : 'en'
-      ;(app.config.globalProperties as unknown as { $formkit?: { setLocale?: (l: string) => void } }).$formkit?.setLocale?.(localeKey)
-    } catch {}
-  })
+  bus.subscribe('i18n.locale.changed', () => {})
 }
 
 async function initNotifySse(): Promise<void> {
@@ -471,7 +463,6 @@ async function createPortalApp(base?: string) {
 
   app.use(router)
   app.use(ElementPlus)
-  app.use(plugin, getFormKitConfig())
   installErrorCenter(app)
   app.use(I18nPlugin, {
     loadMessages: async (locale: string) => {
@@ -479,8 +470,8 @@ async function createPortalApp(base?: string) {
       return import('./i18n/locales/en-US-portal.json').then(m => m.default)
     }
   })
-  app.component('CidsCard', CidsCard)
   app.component('PortalIcon', PortalIcon)
+  app.component('svg-icon', PortalSvgIcon)
 
   setupBridges(app, router)
 

@@ -21,6 +21,7 @@
   /* --- Text Colors --- */
   --color-text-primary: #428bca;
   --color-text-title: #273542;
+  --color-text-default: #5f6973;
   --color-text-base: #b9bec6;
   --color-text-placeholder: #a8abb2;
   --color-text-disabled: #c0c4cc;
@@ -30,10 +31,15 @@
   --color-border-base: #b9bec6;
   --color-border-warning: #f0a536;
   --color-border-danger: #f75d31;
+  --color-border-light: #e7e7e7;
 
   /* --- Background Colors --- */
   --color-background-base: #ffffff;
   --color-background-page: #f6f8fa;
+  --color-background-warning: rgba(240, 165, 54, 0.25);
+  --color-background-success: rgba(140, 199, 79, 0.25);
+  --color-background-danger: rgba(247, 93, 63, 0.25);
+  --color-background-tag: #e4e5e6;
 
   /* --- Click Colors --- */
   --default-warning: #f0a536;
@@ -63,22 +69,21 @@
   --select-color-pressed: #c2d9ed;
 
   /* --- Shadows --- */
-  --shadow-primary:
-    0 2px 4px rgba(66, 139, 202, 0.12), 0 0 6px rgba(66, 139, 202, 0.12);
+  --shadow-primary: 0 2px 4px rgba(66, 139, 202, 0.12), 0 0 6px rgba(66, 139, 202, 0.12);
   --shadow-warning: 0 2px 12px 0 rgba(240, 165, 54, 0.3);
   --shadow-danger: 0 2px 12px 0 rgba(247, 93, 49, 0.3);
   --shadow-base: 0 4px 16px rgba(27, 87, 151, 0.15);
+  --shadow-tooltip: 0px 0px 4px rgba(0, 0, 0, 0.2);
+  --shadow-light: 0 2px 12px rgba(0, 0, 0, 0.15);
 
   /* --- Typography --- */
   --font-family:
-    OpenSans, "Open Sans", "Helvetica Neue", Helvetica, Arial, "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-family-regular: OpenSans, "Open Sans", var(--font-family);
+    OpenSans, 'Open Sans', 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', sans-serif;
+  --font-family-regular: OpenSans, 'Open Sans', var(--font-family);
   --font-family-semibold:
-    OpenSans-Semibold, "Open Sans Semibold", "Open Sans", OpenSans,
-    var(--font-family);
-  --font-family-bold:
-    OpenSans-Bold, "Open Sans Bold", "Open Sans", OpenSans, var(--font-family);
+    OpenSans-Semibold, 'Open Sans Semibold', 'Open Sans', OpenSans, var(--font-family);
+  --font-family-bold: OpenSans-Bold, 'Open Sans Bold', 'Open Sans', OpenSans, var(--font-family);
 
   --font-size-extra-large: 26px;
   --font-size-large: 24px;
@@ -110,6 +115,7 @@
   --spacing-xl-minus: 26px;
   --spacing-xl: 28px;
   --spacing-xl-plus: 30px;
+  --spacing-3xl: 60px;
 
   /* --- Component Sizes --- */
   --size-xxs: 10px;
@@ -131,6 +137,9 @@
   --radius-circle: 100%;
 
   /* --- Component Specific --- */
+  --switch-on-color: #e4e5e6;
+  --switch-off-color: #e4e5e6;
+
   --btn-cancel-bg: var(--default-default);
   --btn-ok-bg: var(--default-primary);
   --btn-view-bg: var(--default-primary);
@@ -178,7 +187,7 @@
   --el-color-white: var(--color-white);
   --el-color-black: var(--color-black);
 
-  --el-text-color-primary: var(--color-text-primary);
+  --el-text-color-primary: var(--color-text-default);
   --el-text-color-placeholder: var(--color-text-placeholder);
   --el-text-color-disabled: var(--color-text-disabled);
 
@@ -188,4 +197,6 @@
   --el-border-radius-small: var(--radius-sm);
   --el-border-radius-round: var(--radius-round);
   --el-border-radius-circle: var(--radius-circle);
+
+  --el-sub-menu-hover: rgba(210, 224, 237, 0.2);
 }

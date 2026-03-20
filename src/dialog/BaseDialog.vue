@@ -1,5 +1,6 @@
 <template>
   <ElDialog
+    ref="elDialogRef"
     v-model="visible"
     :title="title"
     :width="width"
@@ -15,7 +16,8 @@
     :lock-scroll="lockScroll"
     :z-index="zIndex"
     :modal-class="modalClass"
-    :class="dialogClass"
+    :class="['base-dialog', dialogClass]"
+    v-bind="$attrs"
     @open="handleOpen"
     @opened="emit('opened')"
     @close="emit('close')"
@@ -25,16 +27,14 @@
       <slot name="header" />
     </template>
 
-    <div class="base-dialog__body" :style="{ maxHeight: bodyMaxHeight }" @keydown="handleKeydown">
+    <div class="base-dialog__body" :style="bodyStyles" @keydown="handleKeydown">
       <slot />
     </div>
 
-    <template v-if="showFooter" #footer>
+    <!-- Always render #footer so child slot overrides work -->
+    <template #footer>
       <slot name="footer">
-        <div class="base-dialog__footer">
-          <ElButton v-if="showCancel" @click="handleCancel" :disabled="disabled || isConfirming">
-            {{ cancelText || $t('common.cancel') }}
-          </ElButton>
+        <div v-if="showFooter" class="base-dialog__footer">
           <ElButton
             v-if="showConfirm"
             type="primary"
@@ -42,7 +42,15 @@
             :loading="isConfirming"
             :disabled="disabled"
           >
-            {{ confirmText || $t('common.ok') }}
+            {{ confirmText || t('common.save') }}
+          </ElButton>
+          <ElButton
+            v-if="showCancel"
+            class="base-dialog__cancel-btn"
+            @click="handleCancel"
+            :disabled="disabled || isConfirming"
+          >
+            {{ cancelText || t('common.cancel') }}
           </ElButton>
         </div>
       </slot>
@@ -51,17 +59,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, inject, useAttrs } from 'vue'
 import { ElButton, ElDialog } from 'element-plus'
 import 'element-plus/es/components/dialog/style/css'
 import 'element-plus/es/components/button/style/css'
 
+defineOptions({ inheritAttrs: false })
+
+const i18n = inject<{
+  t: (key: string, params?: Record<string, unknown>) => string
+} | null>('i18n', null)
+const t = (key: string, params?: Record<string, unknown>): string =>
+  i18n?.t(key, params) ?? key
+
 type ConfirmResult = void | boolean
 type ConfirmHandler = () => ConfirmResult | Promise<ConfirmResult>
-
-const DEFAULT_WIDTH = '520px'
-const DEFAULT_TOP = '10vh'
-const DEFAULT_BODY_MAX_HEIGHT = '60vh'
 
 const props = withDefaults(defineProps<{
   modelValue: boolean
@@ -78,9 +90,10 @@ const props = withDefaults(defineProps<{
   alignCenter?: boolean
   lockScroll?: boolean
   zIndex?: number
-  dialogClass?: any
+  dialogClass?: string | string[]
   modalClass?: string
   bodyMaxHeight?: string
+  bodyPadding?: string
 
   showFooter?: boolean
   showCancel?: boolean
@@ -93,8 +106,8 @@ const props = withDefaults(defineProps<{
   onConfirm?: ConfirmHandler
 }>(), {
   title: '',
-  width: DEFAULT_WIDTH,
-  top: DEFAULT_TOP,
+  width: '520px',
+  top: '10vh',
   fullscreen: false,
   draggable: false,
   appendToBody: true,
@@ -105,8 +118,8 @@ const props = withDefaults(defineProps<{
   alignCenter: false,
   lockScroll: true,
   modalClass: '',
-  bodyMaxHeight: DEFAULT_BODY_MAX_HEIGHT,
-  
+  bodyMaxHeight: '60vh',
+
   showFooter: true,
   showCancel: true,
   showConfirm: true,
@@ -116,13 +129,13 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-  (e: 'open'): void
-  (e: 'opened'): void
-  (e: 'close'): void
-  (e: 'closed'): void
-  (e: 'confirm'): void
-  (e: 'cancel'): void
+  'update:modelValue': [value: boolean]
+  open: []
+  opened: []
+  close: []
+  closed: []
+  confirm: []
+  cancel: []
 }>()
 
 const visible = computed({
@@ -130,11 +143,20 @@ const visible = computed({
   set: (v: boolean) => emit('update:modelValue', v),
 })
 
+const bodyStyles = computed(() => {
+  const s: Record<string, string> = {}
+  if (props.bodyMaxHeight) s.maxHeight = props.bodyMaxHeight
+  if (props.bodyPadding) s.padding = props.bodyPadding
+  return s
+})
+
+const elDialogRef = ref<InstanceType<typeof ElDialog> | null>(null)
 const lastActive = ref<HTMLElement | null>(null)
 const innerConfirming = ref(false)
 
 const isConfirming = computed(() => props.confirmLoading ?? innerConfirming.value)
 
+/** @author Cooper Wang */
 function handleOpen() {
   emit('open')
   try {
@@ -144,6 +166,7 @@ function handleOpen() {
   }
 }
 
+/** @author Cooper Wang */
 function handleClosed() {
   emit('closed')
   try {
@@ -152,11 +175,16 @@ function handleClosed() {
   lastActive.value = null
 }
 
+/** @author Cooper Wang */
 function handleCancel() {
   emit('cancel')
   visible.value = false
 }
 
+/**
+ * Execute confirm handler with loading state management
+ * @author Cooper Wang
+ */
 async function handleConfirm() {
   if (isConfirming.value) return
   emit('confirm')
@@ -176,28 +204,148 @@ async function handleConfirm() {
   }
 }
 
+/**
+ * Handle Enter key press to trigger confirm action
+ * @author Cooper Wang
+ * @param {KeyboardEvent} e - Keyboard event
+ */
 function handleKeydown(e: KeyboardEvent) {
   if (e?.key !== 'Enter') return
   if (props.disabled) return
   const tag = (e.target as HTMLElement | null)?.tagName?.toLowerCase?.() || ''
-  if (tag === 'textarea' || tag === 'button') return
+  if (tag === 'textarea' || tag === 'button' || tag === 'select') return
   handleConfirm()
 }
+
+defineExpose({
+  elRef: elDialogRef,
+  resetPosition: () => (elDialogRef.value as any)?.resetPosition?.(),
+  handleClose: () => (elDialogRef.value as any)?.handleClose?.(),
+})
 </script>
 
 <style scoped>
-.base-dialog__body { overflow: auto; }
-.base-dialog__footer { display: flex; justify-content: flex-end; gap: var(--spacing-sm); }
-:deep(.el-button){
- padding: var(--spacing-xs) var(--spacing-md);
- height: var(--dashboard-action-btn-height);
- border-radius: var(--radius-lg);
- font-size: var(--font-size-extra-small);
+/* Body scroll (scoped - this element is inside the component) */
+.base-dialog__body {
+  overflow: auto;
 }
-:deep(.el-button--primary){
-  border: 1px solid var(--color-primary);
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+
+/* Footer layout (scoped) */
+.base-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm-plus);
+}
+</style>
+
+<style>
+
+/* Dialog panel — compound selector targets same element */
+.el-dialog.base-dialog {
+  --el-dialog-padding-primary: 0;
+  border-radius: var(--radius-base);
+  overflow: hidden;
+  padding: 0 !important;
+  box-shadow: var(--shadow-base);
+}
+
+/* Header: 35px, dark #273542 background, white bold text */
+.base-dialog .el-dialog__header {
+  height: 35px;
+  margin: 0;
+  padding: 0 var(--spacing-lg-minus);
+  background-color: var(--color-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.base-dialog .el-dialog__title {
+  font-size: var(--font-size-mini);
+  font-family: var(--font-family-bold);
+  font-weight: 700;
   color: var(--color-white);
+  line-height: 35px;
+}
+
+/* Close button: white × icon */
+.base-dialog .el-dialog__headerbtn {
+  top: 0;
+  right: 0;
+  width: 35px;
+  height: 35px;
+}
+
+.base-dialog .el-dialog__headerbtn .el-dialog__close {
+  color: var(--color-white);
+  font-size: var(--font-size-extra-small);
+}
+
+.base-dialog .el-dialog__headerbtn:hover .el-dialog__close {
+  color: var(--color-text-base);
+}
+
+/* Body: 20px padding default */
+.base-dialog .el-dialog__body {
+  padding: var(--spacing-lg-minus);
+}
+
+/* Footer: 10px top, 20px sides/bottom */
+.base-dialog .el-dialog__footer {
+  padding: var(--spacing-sm-plus) var(--spacing-lg-minus) var(--spacing-lg-minus);
+}
+
+/* ========== Footer button base styles (all dialog footers) ========== */
+.base-dialog .el-dialog__footer .el-button {
+  min-width: 90px;
+  height: 28px;
+  padding: 0 var(--spacing-sm-plus);
+  border-radius: var(--radius-sm) !important;
+  font-size: var(--font-size-tiny);
+  font-family: var(--font-family-regular);
+  font-weight: 400;
+  box-shadow: none !important;
+}
+
+/* Save/Confirm button: primary #428bca */
+.base-dialog .el-button--primary {
+  background-color: var(--btn-ok-bg);
+  border-color: var(--btn-ok-bg);
+  color: var(--color-white);
+}
+
+.base-dialog .el-button--primary:hover,
+.base-dialog .el-button--primary:focus {
+  background-color: var(--btn-ok-hover);
+  border-color: var(--btn-ok-hover);
+  color: var(--color-white);
+}
+
+.base-dialog .el-button--primary:active {
+  background-color: var(--btn-ok-pressed);
+  border-color: var(--btn-ok-pressed);
+}
+
+/* Cancel button: dark #445d75 */
+.base-dialog .base-dialog__cancel-btn {
+  background-color: var(--btn-cancel-bg);
+  border-color: var(--btn-cancel-bg);
+  color: var(--color-white);
+}
+
+.base-dialog .base-dialog__cancel-btn:hover,
+.base-dialog .base-dialog__cancel-btn:focus {
+  background-color: var(--hover-default);
+  border-color: var(--hover-default);
+  color: var(--color-white);
+}
+
+.base-dialog .base-dialog__cancel-btn:active {
+  background-color: var(--pressed-default);
+  border-color: var(--pressed-default);
+}
+
+/* Disabled button state */
+.base-dialog .el-button.is-disabled {
+  opacity: 0.5;
 }
 </style>

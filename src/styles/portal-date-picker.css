@@ -1,0 +1,571 @@
+/**
+ * PortalDatePicker – Component styles
+ * @description All styles for PortalDatePicker: input trigger + teleported popper panel.
+ *   Imported by PortalDatePicker.vue as a single external stylesheet.
+ */
+
+/* ======================== Input Trigger ======================== */
+
+.portal-date-picker {
+    --_ctrl-size: 25px;
+    display: inline-block;
+}
+
+.portal-date-picker .el-date-editor {
+    --el-date-editor-width: var(--_width);
+    width: var(--_width) !important;
+}
+
+.portal-date-picker .el-input__wrapper {
+    height: var(--_ctrl-size) !important;
+    min-height: var(--_ctrl-size) !important;
+    box-shadow: 0 0 0 1px var(--color-border-base) inset !important;
+    border-radius: var(--radius-base);
+    background-color: var(--color-background-base) !important;
+    padding-right: 0 !important;
+    padding-left: var(--spacing-sm) !important;
+}
+
+.portal-date-picker .el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 1px var(--color-primary) inset !important;
+}
+
+.portal-date-picker .el-input__inner {
+    font-family: var(--font-family-regular);
+    font-size: var(--font-size-tiny);
+    font-weight: var(--font-weight-primary);
+    color: var(--color-text-title);
+    line-height: var(--_ctrl-size);
+}
+
+/* Calendar icon → right-side styled trigger button */
+.portal-date-picker .el-input__prefix {
+    order: 2;
+    width: var(--_ctrl-size) !important;
+    height: var(--_ctrl-size) !important;
+    align-self: center !important;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-primary);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--color-white);
+    border: none;
+    padding: 0 !important;
+    margin: 0 0 0 auto !important;
+    position: static !important;
+}
+
+.portal-date-picker .el-input__prefix .el-input__prefix-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.portal-date-picker .el-input__prefix .el-icon {
+    color: var(--color-white) !important;
+    font-size: var(--font-size-mini);
+    margin: 0 !important;
+}
+
+.portal-date-picker .el-input__wrapper:hover .el-input__prefix {
+    background-color: var(--hover-primary);
+}
+
+.portal-date-picker .el-input__suffix { display: none !important; }
+
+/* Disabled */
+.portal-date-picker .is-disabled .el-input__wrapper {
+    background-color: var(--color-background-page) !important;
+    cursor: not-allowed;
+}
+
+.portal-date-picker .is-disabled .el-input__inner { color: var(--color-text-disabled); }
+
+.portal-date-picker .is-disabled .el-input__prefix {
+    background-color: var(--color-text-disabled);
+    cursor: not-allowed;
+}
+
+/* ======================== Popper Container ======================== */
+
+.portal-date-picker-popper {
+    --date-picker-panel-width: 230px;
+    --date-picker-table-width: 210px;
+    --date-picker-ctrl-size: 25px;
+    --date-picker-dropdown-max-height: 250px;
+
+    border: 1px solid var(--color-border-base) !important;
+    border-radius: var(--radius-base) !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.portal-date-picker-popper .el-popper__arrow { display: none !important; }
+
+/* ======================== Panel Layout ======================== */
+
+.portal-date-picker-popper .el-date-picker,
+.portal-date-picker-popper .el-date-picker.has-sidebar {
+    width: var(--date-picker-panel-width) !important;
+}
+
+.portal-date-picker-popper .el-picker-panel__body-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.portal-date-picker-popper .el-picker-panel__body-wrapper::after,
+.portal-date-picker-popper .el-picker-panel__body::after {
+    display: none !important;
+}
+
+.portal-date-picker-popper .el-picker-panel__body {
+    order: 0;
+    padding: 0;
+    min-width: auto;
+    margin-left: 0 !important;
+    /* Keep panel height stable when dropdown overlays the date grid */
+    position: relative;
+    min-height: calc(var(--table-row-height) * 7 + var(--spacing-xs-plus) * 2);
+}
+
+/* ======================== Sidebar (Today shortcut) ======================== */
+
+.portal-date-picker-popper .el-picker-panel__sidebar {
+    position: static !important;
+    float: none !important;
+    order: 1;
+    width: 100% !important;
+    border: none !important;
+    padding: var(--spacing-sm-plus) !important;
+    text-align: center;
+    top: auto !important;
+    bottom: auto !important;
+    overflow: visible !important;
+    box-sizing: border-box;
+}
+
+.portal-date-picker-popper .el-picker-panel__shortcut {
+    display: block !important;
+    width: 100% !important;
+    height: var(--size-3xl) !important;
+    line-height: var(--size-3xl) !important;
+    min-width: 90px !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    background: var(--default-primary) !important;
+    font-family: var(--font-family-regular) !important;
+    font-size: var(--font-size-tiny) !important;
+    font-weight: var(--font-weight-primary) !important;
+    color: var(--color-white) !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    padding: 0 var(--spacing-sm-large) !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+.portal-date-picker-popper .el-picker-panel__shortcut:hover  { background: var(--hover-primary) !important; }
+.portal-date-picker-popper .el-picker-panel__shortcut:active { background: var(--pressed-primary) !important; }
+
+/* ======================== Header ======================== */
+
+.portal-date-picker-popper .el-date-picker__header {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-sm-plus) !important;
+    margin: 0 !important;
+    gap: var(--spacing-xs-plus);
+}
+
+.portal-date-picker-popper .el-date-picker__header--bordered { border-bottom: none !important; }
+
+.portal-date-picker-popper .el-picker-panel__icon-btn {
+    margin-top: 0 !important;
+    vertical-align: middle !important;
+    line-height: 1 !important;
+}
+
+/* Hide double arrows (year-level navigation) */
+.portal-date-picker-popper .el-picker-panel__icon-btn.d-arrow-left,
+.portal-date-picker-popper .el-picker-panel__icon-btn.d-arrow-right {
+    display: none !important;
+}
+
+.portal-date-picker-popper .el-date-picker__prev-btn,
+.portal-date-picker-popper .el-date-picker__next-btn {
+    display: contents !important;
+}
+
+/* Prev / Next arrow buttons */
+.portal-date-picker-popper .el-picker-panel__icon-btn.arrow-left,
+.portal-date-picker-popper .el-picker-panel__icon-btn.arrow-right {
+    color: var(--color-text-title) !important;
+    padding: 0 !important;
+    width: var(--date-picker-ctrl-size);
+    height: var(--date-picker-ctrl-size);
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-base) !important;
+    background-color: var(--color-background-page) !important;
+    border-radius: var(--radius-base);
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.portal-date-picker-popper .el-picker-panel__icon-btn.arrow-left  { order: 0; margin: 0 auto 0 0 !important; }
+.portal-date-picker-popper .el-picker-panel__icon-btn.arrow-right { order: 3; margin: 0 0 0 auto !important; }
+
+.portal-date-picker-popper .el-picker-panel__icon-btn.arrow-left:hover,
+.portal-date-picker-popper .el-picker-panel__icon-btn.arrow-right:hover {
+    color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+}
+
+/* ======================== Header Labels (Month / Year) ======================== */
+
+.portal-date-picker-popper .el-date-picker__header-label {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: flex-start;
+    height: var(--date-picker-ctrl-size);
+    border: 1px solid var(--color-border-base);
+    border-radius: var(--radius-base);
+    padding: 0 var(--spacing-lg-minus) 0 var(--spacing-xs-plus) !important;
+    position: relative;
+    font-family: var(--font-family-regular) !important;
+    font-size: var(--font-size-micro) !important;
+    font-weight: var(--font-weight-primary) !important;
+    color: var(--color-text-title) !important;
+    cursor: pointer;
+    background: var(--color-background-base);
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: calc(var(--date-picker-ctrl-size) - 2px) !important;
+    order: 2; /* Year label (1st in DOM) rendered 2nd visually */
+    flex: 1;
+    min-width: 0;
+}
+
+/* Month label (2nd in DOM) rendered 1st visually */
+.portal-date-picker-popper .el-date-picker__header-label + .el-date-picker__header-label { order: 1; }
+
+/* Blue indicator on right side */
+.portal-date-picker-popper .el-date-picker__header-label::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: var(--size-lg);
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: 0 calc(var(--radius-base) - 1px) calc(var(--radius-base) - 1px) 0;
+}
+
+/* White triangle inside indicator */
+.portal-date-picker-popper .el-date-picker__header-label::before {
+    content: "";
+    position: absolute;
+    right: var(--spacing-xs-plus);
+    top: 50%;
+    transform: translateY(-50%);
+    border: 4px solid transparent;
+    border-top: 5px solid var(--color-white);
+    border-bottom: 0;
+    z-index: 1;
+}
+
+.portal-date-picker-popper .el-date-picker__header-label:hover::after { background-color: var(--hover-primary); }
+
+/* ======================== Date Table (Calendar grid) ======================== */
+
+.portal-date-picker-popper .el-picker-panel__content,
+.portal-date-picker-popper .el-date-picker .el-picker-panel__content {
+    padding: 0 var(--spacing-sm-plus) !important;
+    margin: 0 !important;
+    width: var(--date-picker-table-width) !important;
+}
+
+.portal-date-picker-popper .el-date-table th {
+    font-family: var(--font-family-regular) !important;
+    font-size: var(--font-size-micro) !important;
+    color: var(--color-text-title) !important;
+    font-weight: var(--font-weight-primary) !important;
+    padding: var(--spacing-xs-plus) 0 !important;
+    border-bottom: none !important;
+}
+
+.portal-date-picker-popper .el-date-table,
+.portal-date-picker-popper .el-date-picker table:not(.el-month-table):not(.el-year-table) {
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    width: var(--date-picker-table-width) !important;
+}
+
+.portal-date-picker-popper .el-date-table td {
+    padding: 0 !important;
+    height: var(--table-row-height) !important;
+    border: 1px solid var(--color-border-base) !important;
+}
+
+.portal-date-picker-popper .el-date-table td .el-date-table-cell {
+    height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+}
+
+.portal-date-picker-popper .el-date-table td .el-date-table-cell__text {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    font-family: var(--font-family-regular) !important;
+    font-size: var(--font-size-micro) !important;
+    color: var(--color-text-title) !important;
+    border-radius: 0 !important;
+    border: none !important;
+    background-color: var(--color-background-base) !important;
+    box-sizing: border-box !important;
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    margin: 0 !important;
+}
+
+.portal-date-picker-popper .el-date-table td.available:not(.current) .el-date-table-cell__text:hover {
+    background-color: var(--color-border-base) !important;
+}
+
+.portal-date-picker-popper .el-date-table td.current:not(.disabled) .el-date-table-cell__text {
+    background-color: var(--color-primary) !important;
+    color: var(--color-white) !important;
+}
+
+.portal-date-picker-popper .el-date-table td.current:not(.disabled) .el-date-table-cell__text:hover {
+    background-color: var(--select-color-hover) !important;
+    color: var(--color-text-title) !important;
+}
+
+.portal-date-picker-popper .el-date-table td.today:not(.current) .el-date-table-cell__text {
+    color: var(--color-primary) !important;
+    font-weight: 700 !important;
+}
+
+.portal-date-picker-popper .el-date-table td.prev-month .el-date-table-cell__text,
+.portal-date-picker-popper .el-date-table td.next-month .el-date-table-cell__text {
+    color: var(--color-border-base) !important;
+}
+
+.portal-date-picker-popper .el-date-table td.disabled .el-date-table-cell__text {
+    background-color: var(--color-background-page) !important;
+    color: var(--color-text-disabled) !important;
+    cursor: not-allowed !important;
+}
+
+/* ======================== Month / Year Dropdown List ======================== */
+
+.portal-date-picker-popper .el-date-picker .el-month-table,
+.portal-date-picker-popper .el-date-picker .el-year-table {
+    display: block !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-height: var(--date-picker-dropdown-max-height) !important;
+    overflow-y: auto !important;
+    border: 1px solid var(--color-border-base) !important;
+    border-radius: var(--radius-base) !important;
+    background: var(--color-background-base) !important;
+    margin: 0 !important;
+}
+
+/* Scrollbar — single arrow button at each end */
+.portal-date-picker-popper .el-month-table::-webkit-scrollbar,
+.portal-date-picker-popper .el-year-table::-webkit-scrollbar {
+    width: var(--size-lg);
+}
+
+.portal-date-picker-popper .el-month-table::-webkit-scrollbar-track,
+.portal-date-picker-popper .el-year-table::-webkit-scrollbar-track {
+    background: var(--color-background-base);
+    border-left: 1px solid var(--color-border-base);
+}
+
+.portal-date-picker-popper .el-month-table::-webkit-scrollbar-thumb,
+.portal-date-picker-popper .el-year-table::-webkit-scrollbar-thumb {
+    background: var(--color-border-base);
+    border: 1px solid var(--color-border-base);
+}
+
+.portal-date-picker-popper .el-month-table::-webkit-scrollbar-button,
+.portal-date-picker-popper .el-year-table::-webkit-scrollbar-button {
+    display: block;
+    height: var(--size-lg);
+    background-color: var(--color-background-base);
+    border: 1px solid var(--color-border-base);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 8px 5px;
+}
+
+/* Hide extra buttons: keep only up at top, down at bottom */
+.portal-date-picker-popper .el-month-table::-webkit-scrollbar-button:start:increment,
+.portal-date-picker-popper .el-year-table::-webkit-scrollbar-button:start:increment,
+.portal-date-picker-popper .el-month-table::-webkit-scrollbar-button:end:decrement,
+.portal-date-picker-popper .el-year-table::-webkit-scrollbar-button:end:decrement {
+    display: none;
+}
+
+/* Up arrow — top only */
+.portal-date-picker-popper .el-month-table::-webkit-scrollbar-button:decrement,
+.portal-date-picker-popper .el-year-table::-webkit-scrollbar-button:decrement {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpolyline points='1,5 5,1 9,5' fill='none' stroke='%23273542' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Down arrow — bottom only */
+.portal-date-picker-popper .el-month-table::-webkit-scrollbar-button:increment,
+.portal-date-picker-popper .el-year-table::-webkit-scrollbar-button:increment {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpolyline points='1,1 5,5 9,1' fill='none' stroke='%23273542' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Grid layout: single column list */
+.portal-date-picker-popper .el-month-table tbody,
+.portal-date-picker-popper .el-year-table tbody {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+}
+
+.portal-date-picker-popper .el-month-table tr,
+.portal-date-picker-popper .el-year-table tr {
+    display: contents !important;
+}
+
+/* Row items */
+.portal-date-picker-popper .el-month-table td,
+.portal-date-picker-popper .el-year-table td {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+    height: auto !important;
+    position: relative;
+}
+
+/* Horizontal divider — 1px gap from left/right edges */
+.portal-date-picker-popper .el-month-table td::after,
+.portal-date-picker-popper .el-year-table td::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    right: 1px;
+    border-bottom: 1px solid var(--color-border-base);
+    pointer-events: none;
+}
+
+/* Remove divider on last item */
+.portal-date-picker-popper .el-month-table tr:last-child > td:last-child::after,
+.portal-date-picker-popper .el-year-table tr:last-child > td:last-child::after {
+    display: none;
+}
+
+/* Unselected row — white background */
+.portal-date-picker-popper .el-month-table td .el-date-table-cell,
+.portal-date-picker-popper .el-year-table td .el-date-table-cell {
+    height: var(--table-row-height) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 0 0 0 var(--spacing-xs-plus) !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    background-color: var(--color-background-base) !important;
+}
+
+.portal-date-picker-popper .el-month-table td .el-date-table-cell__text,
+.portal-date-picker-popper .el-year-table td .el-date-table-cell__text {
+    font-family: var(--font-family-regular) !important;
+    font-size: var(--font-size-micro) !important;
+    font-weight: var(--font-weight-primary) !important;
+    color: var(--color-text-title) !important;
+    border-radius: 0 !important;
+    width: auto !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    margin: 0 !important;
+    background: none !important;
+}
+
+/* Hover */
+.portal-date-picker-popper .el-month-table td:hover .el-date-table-cell,
+.portal-date-picker-popper .el-year-table td:hover .el-date-table-cell {
+    background-color: var(--select-color-hover) !important;
+}
+
+.portal-date-picker-popper .el-month-table td:hover .el-date-table-cell__text,
+.portal-date-picker-popper .el-year-table td:hover .el-date-table-cell__text {
+    color: var(--color-primary) !important;
+}
+
+/* Selected (current) — primary background, full fill, no border-radius */
+.portal-date-picker-popper .el-month-table td.current:not(.disabled) .el-date-table-cell,
+.portal-date-picker-popper .el-year-table td.current:not(.disabled) .el-date-table-cell {
+    background-color: var(--color-primary) !important;
+    border-radius: 0 !important;
+}
+
+.portal-date-picker-popper .el-month-table td.current:not(.disabled) .el-date-table-cell__text,
+.portal-date-picker-popper .el-year-table td.current:not(.disabled) .el-date-table-cell__text {
+    color: var(--color-white) !important;
+}
+
+/* ======================== Dropdown Positioning ======================== */
+/*
+ * Header flex layout:
+ *   [pad] [arrow] [gap] [month flex:1] [gap] [year flex:1] [gap] [arrow] [pad]
+ *   pad = --spacing-sm-plus, gap = --spacing-xs-plus, arrow = --date-picker-ctrl-size
+ */
+
+.portal-date-picker-popper .el-picker-panel__content:has(.el-month-table),
+.portal-date-picker-popper .el-picker-panel__content:has(.el-year-table) {
+    --_pad: var(--spacing-sm-plus);
+    --_gap: var(--spacing-xs-plus);
+    --_header-h: calc(var(--spacing-sm) * 2 + var(--date-picker-ctrl-size));
+    --_label-w: calc((var(--date-picker-panel-width) - 2 * var(--_pad) - 2 * var(--date-picker-ctrl-size) - 3 * var(--_gap)) / 2);
+    --_month-left: calc(var(--_pad) + var(--date-picker-ctrl-size) + var(--_gap));
+    --_year-left: calc(var(--_month-left) + var(--_label-w) + var(--_gap));
+    /* Float as overlay above the date panel */
+    position: absolute !important;
+    z-index: 10;
+    top: var(--_header-h);
+    display: block !important;
+    box-sizing: border-box !important;
+    width: var(--date-picker-panel-width) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.portal-date-picker-popper .el-picker-panel__content:has(.el-month-table) {
+    padding-left: var(--_month-left) !important;
+    padding-right: calc(var(--date-picker-panel-width) - var(--_month-left) - var(--_label-w)) !important;
+}
+
+.portal-date-picker-popper .el-picker-panel__content:has(.el-year-table) {
+    padding-left: var(--_year-left) !important;
+    padding-right: calc(var(--date-picker-panel-width) - var(--_year-left) - var(--_label-w)) !important;
+}

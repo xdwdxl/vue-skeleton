@@ -1,0 +1,121 @@
+/**
+ * PortalPaging – Component styles
+ * @description Styles for the compact pagination control bar.
+ *   Imported by PortalPaging.vue as an external stylesheet.
+ */
+
+/* 5px gap — no matching design token exists (nearest: --spacing-xs=4px, --spacing-xs-plus=6px) */
+
+/* ======================== Container ======================== */
+
+.portal-paging {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--color-background-base);
+    padding: var(--spacing-md) 0;
+    font-size: var(--font-size-micro);
+    font-family: var(--font-family-regular);
+    color: var(--color-text-title);
+}
+
+.portal-paging__divider {
+    width: 1px;
+    height: var(--size-sm);
+    background-color: var(--color-border-base);
+}
+
+/* ======================== Navigation Buttons ======================== */
+
+.portal-paging__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-xxl);
+    height: var(--size-xxl);
+    border: 1px solid var(--color-border-base);
+    background-color: var(--color-background-base);
+    color: inherit;
+    cursor: pointer;
+    border-radius: var(--radius-base);
+    font-size: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+.portal-paging__btn:hover:not(:disabled) { background-color: var(--select-color-hover); }
+
+.portal-paging__btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* ======================== Page Info ======================== */
+
+.portal-paging__info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs-plus);
+    margin: 0 5px;
+    white-space: nowrap;
+}
+
+.portal-paging__input {
+    height: var(--size-xxl);
+    border: 1px solid var(--color-border-base);
+    border-radius: var(--radius-base);
+    text-align: center;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    background-color: var(--color-background-base);
+    outline: none;
+}
+
+.portal-paging__input:focus { background-color: var(--select-color-base); }
+
+/* ======================== Page Size Selector ======================== */
+
+.portal-paging__size-wrap {
+    position: relative;
+}
+
+.portal-paging__size {
+    width: 100%;
+    height: var(--size-xxl);
+    border: 1px solid var(--color-border-base);
+    border-radius: var(--radius-base);
+    background-color: var(--color-background-page);
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0 var(--spacing-lg-minus) 0 var(--spacing-xs);
+    cursor: pointer;
+    appearance: none;
+    outline: none;
+}
+
+.portal-paging__size:hover  { background-color: var(--color-border-base); }
+.portal-paging__size:focus  { background-color: var(--select-color-base); }
+
+.portal-paging__size-arrow {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+    width: var(--size-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 0 calc(var(--radius-base) - 1px) calc(var(--radius-base) - 1px) 0;
+    pointer-events: none;
+    font-size: var(--size-xxs);
+}
+
+/* ======================== Total ======================== */
+
+.portal-paging__total {
+    white-space: nowrap;
+}

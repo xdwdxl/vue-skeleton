@@ -92,7 +92,7 @@ class ThemeManager {
       // Fallback to default theme if config is missing
       this.applyTheme({
         color: {
-          primary: 'var(--color-primary)',
+          primary: '#428bca',
           success: '#67C23A',
           warning: '#E6A23C',
           danger: '#F56C6C',

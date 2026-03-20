@@ -8,15 +8,21 @@ vi.mock('vue', async () => {
   return {
     ...actual,
     inject: vi.fn(),
-    provide: vi.fn()
+    provide: vi.fn(),
   }
 })
 
 // Mock API to prevent network calls during plugin install (which inits manager)
 vi.mock('../../api', () => ({
   API: {
-    GetConfig: vi.fn().mockResolvedValue({ status: 200, statusText: 'OK', headers: {}, config: {} as any, data: {} } as unknown as import('axios').AxiosResponse)
-  }
+    GetConfig: vi.fn().mockResolvedValue({
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {} as any,
+      data: {},
+    } as unknown as import('axios').AxiosResponse),
+  },
 }))
 
 describe('I18n Plugin', () => {
@@ -27,32 +33,42 @@ describe('I18n Plugin', () => {
   it('should install plugin', () => {
     const app = {
       config: {
-        globalProperties: {}
+        globalProperties: {},
       },
-      provide: vi.fn()
+      provide: vi.fn(),
     }
-    
+
     // @ts-expect-error mock
     I18nPlugin.install(app, {})
-    
+
     expect((app.config.globalProperties as any).$t).toBeDefined()
     expect((app.config.globalProperties as any).$i18n).toBeDefined()
     expect(app.provide).toHaveBeenCalledWith('i18n', expect.any(Object))
   })
 
   it('should useI18n', () => {
-    const mockI18n = { t: vi.fn() }
+    const mockI18n = {
+      t: vi.fn(),
+      setLocale: vi.fn(),
+      getLocale: vi.fn(),
+      loadLocale: vi.fn(),
+      locale: 'en-US',
+    }
     // @ts-expect-error mock
     inject.mockReturnValue(mockI18n)
-    
+
     const i18n = useI18n()
-    expect(i18n).toBe(mockI18n)
+    expect(i18n.t).toBeDefined()
+    expect(i18n.setLocale).toBeDefined()
+    expect(i18n.getLocale).toBeDefined()
+    expect(i18n.loadLocale).toBeDefined()
+    expect('locale' in i18n).toBe(true)
   })
 
   it('should throw if i18n not provided', () => {
     // @ts-expect-error mock
     inject.mockReturnValue(undefined)
-    
+
     expect(() => useI18n()).toThrow('I18n not provided')
   })
 })

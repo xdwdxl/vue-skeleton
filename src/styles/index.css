@@ -7,7 +7,6 @@
 @import './variables-skinLight.css';
 @import './variables-skinDark.css';
 @import './element-plus.css';
-@import './portal-shell.css';
 @import './dashboard.css';
 @import './notify-center.css';
 
@@ -16,7 +15,7 @@ body {
   padding: 0;
   font-family: var(--font-family-regular);
   font-size: var(--font-size-base);
-  color: var(--color-text-primary);
+  color: var(--color-text-title);
   background-color: var(--color-background-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

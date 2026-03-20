@@ -11,7 +11,8 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "src/**/*.json"
+    "src/**/*.json",
+    "src/**/*.js"
   ],
   "exclude": [
     "node_modules",

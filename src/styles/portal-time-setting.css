@@ -1,0 +1,314 @@
+/*
+ * Styles for PortalTimeSetting component.
+ * Extracted to keep the .vue file under 200 lines.
+ */
+
+/* ========== Container ========== */
+.portal-time-setting {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border-base);
+  box-sizing: border-box;
+}
+
+/* ========== Disabled ========== */
+.portal-time-setting--disabled { opacity: 0.6; pointer-events: none; }
+
+/* ========== Tabs ========== */
+.portal-time-setting__tabs {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--color-border-base);
+  padding-left: var(--spacing-sm-plus);
+}
+
+.portal-time-setting__tab {
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-family-bold);
+  font-weight: 700;
+  font-size: var(--font-size-micro);
+  color: var(--color-text-title);
+  cursor: pointer;
+  padding: 0 var(--spacing-sm-plus);
+  position: relative;
+  transition: background-color 0.2s;
+  line-height: 32px;
+  white-space: nowrap;
+}
+
+.portal-time-setting__tab:first-child { padding-left: 0; }
+
+.portal-time-setting__tab:hover:not(.portal-time-setting__tab--active) {
+  background: var(--select-color-hover);
+}
+
+.portal-time-setting__tab-text {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+}
+
+.portal-time-setting__tab--active .portal-time-setting__tab-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-primary);
+}
+
+/* ========== Row ========== */
+.portal-time-setting__row {
+  display: flex;
+  align-items: center;
+  padding-left: var(--spacing-sm-plus);
+}
+
+.portal-time-setting__row--every { margin-top: var(--spacing-sm-plus); }
+
+.portal-time-setting__row--time {
+  margin-top: var(--spacing-sm-plus);
+  margin-bottom: var(--spacing-sm-plus);
+}
+
+.portal-time-setting__row--radio { margin-top: var(--spacing-xs-plus); }
+
+/* ========== Label / Unit ========== */
+.portal-time-setting__label,
+.portal-time-setting__unit-label,
+.portal-time-setting__time-mode-text,
+.portal-time-setting__time-mode-row-label,
+.portal-time-setting__time-mode-legend {
+  font-family: var(--font-family-regular);
+  font-size: var(--font-size-micro);
+  color: var(--color-text-title);
+}
+
+.portal-time-setting__label { flex-shrink: 0; margin-right: var(--spacing-sm-plus); }
+.portal-time-setting__label--time { width: 40px; margin-right: var(--spacing-xs-plus); }
+.portal-time-setting__unit-label { white-space: nowrap; margin-left: var(--spacing-xs-plus); }
+.portal-time-setting__time-mode-row-label { width: 70px; flex-shrink: 0; margin-right: var(--spacing-sm-plus); }
+
+.portal-time-setting__time-mode-legend {
+  padding: 0 var(--spacing-xs-plus);
+  margin-left: 0;
+}
+
+/* ========== Inline spinner offset (radio rows) ========== */
+.portal-time-setting__interval-inline { margin-left: var(--spacing-xs-plus); }
+
+/* ========== Time group (Start/End wrapper) ========== */
+.portal-time-setting__time-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm-plus);
+}
+
+.portal-time-setting__time-group + .portal-time-setting__time-group {
+  margin-left: var(--spacing-lg-minus);
+}
+
+/* ========== Checkbox / Radio (shared base) ========== */
+.portal-time-setting__check,
+.portal-time-setting__radio,
+.portal-time-setting__day-check {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs-plus);
+  font-family: var(--font-family-regular);
+  font-size: var(--font-size-micro);
+  color: var(--color-text-title);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.portal-time-setting__check input[type="checkbox"],
+.portal-time-setting__radio input[type="radio"],
+.portal-time-setting__day-check input[type="checkbox"] {
+  width: var(--size-sm);
+  height: var(--size-sm);
+  accent-color: var(--color-primary);
+  cursor: pointer;
+  margin: 0;
+}
+
+/* Day checkboxes row */
+.portal-time-setting__row--days {
+  margin-top: var(--spacing-xs-plus);
+  padding-left: var(--spacing-xl-plus);
+  gap: 0;
+}
+
+.portal-time-setting__day-check { width: 60px; }
+
+/* ========== Freq input group (hours/minutes/monthDay) ========== */
+.portal-time-setting__freq-input-group {
+  display: flex;
+  align-items: stretch;
+  height: var(--size-3xl);
+  border: 1px solid var(--color-border-base);
+  border-radius: var(--radius-base);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.portal-time-setting__freq-input-group:focus-within { border-color: var(--color-primary); }
+
+.portal-time-setting__freq-input {
+  width: 40px;
+  height: 100%;
+  border: none;
+  text-align: center;
+  font-family: var(--font-family-regular);
+  font-size: var(--font-size-micro);
+  color: var(--color-text-title);
+  background: var(--color-background-base);
+  outline: none;
+  padding: 0;
+  -moz-appearance: textfield;
+}
+
+.portal-time-setting__freq-input::-webkit-inner-spin-button,
+.portal-time-setting__freq-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+.portal-time-setting__freq-suffix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-xl);
+  flex-shrink: 0;
+  background-color: var(--color-primary);
+  border-radius: 0 var(--radius-base) var(--radius-base) 0;
+  color: var(--color-white);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.portal-time-setting__freq-suffix:hover { background-color: var(--hover-primary); }
+
+/* Gap before second freq checkbox (Minutes) */
+.portal-time-setting__freq-input-group + .portal-time-setting__check--freq {
+  margin-left: var(--spacing-sm-plus);
+}
+
+/* ========== Time Mode box (weekly) / fieldset (monthly) ========== */
+.portal-time-setting__time-mode-box,
+.portal-time-setting__time-mode-fieldset {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--color-border-base);
+  margin: var(--spacing-xs-plus) var(--spacing-sm-plus);
+  padding: var(--spacing-sm-plus);
+  gap: var(--spacing-xs-plus);
+  min-height: 74px;
+  box-sizing: border-box;
+}
+
+.portal-time-setting__time-mode-fieldset {
+  padding-top: var(--spacing-xs-plus);
+  border-radius: 0;
+}
+
+.portal-time-setting__time-mode-row {
+  display: flex;
+  align-items: center;
+}
+
+/* Checkbox area 60px wide inside time-mode */
+.portal-time-setting__time-mode-row .portal-time-setting__check {
+  min-width: 60px;
+  margin-right: var(--spacing-xs-plus);
+}
+
+/* Time mode label above box (weekly) */
+.portal-time-setting__row--time-mode-label { margin-top: var(--spacing-xs-plus); }
+
+/* ========== Time Picker deep styles ========== */
+.portal-time-setting__picker-wrap { flex-shrink: 0; }
+
+.portal-time-setting__picker-wrap .el-date-editor {
+  --el-date-editor-width: 75px;
+  width: 75px !important;
+  flex-shrink: 0;
+}
+
+.portal-time-setting__picker-wrap .el-input__wrapper {
+  height: var(--size-3xl) !important;
+  min-height: var(--size-3xl) !important;
+  padding: 0 var(--spacing-xs) 0 var(--spacing-sm) !important;
+  border-radius: var(--radius-base);
+  box-shadow: 0 0 0 1px var(--color-border-base) inset !important;
+  background-color: var(--color-background-base) !important;
+}
+
+.portal-time-setting__picker-wrap .el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 1px var(--color-primary) inset !important;
+}
+
+.portal-time-setting__picker-wrap .el-input__inner {
+  font-family: var(--font-family-regular);
+  font-size: var(--font-size-micro);
+  color: var(--color-text-title);
+  text-align: center;
+  height: var(--size-3xl);
+  line-height: var(--size-3xl);
+}
+
+.portal-time-setting__picker-wrap .el-input__prefix { display: none !important; }
+
+.portal-time-setting__picker-wrap .el-input__suffix {
+  width: var(--size-xl) !important;
+  height: var(--size-xl) !important;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-base);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: static;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  overflow: hidden;
+}
+
+.portal-time-setting__picker-wrap .el-input__suffix-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal-time-setting__picker-wrap .el-input__suffix-inner .el-icon { display: none !important; }
+
+.portal-time-setting__picker-wrap .el-input__suffix-inner::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--color-white);
+}
+
+.portal-time-setting__picker-wrap .el-input__wrapper:hover .el-input__suffix {
+  background-color: var(--hover-primary);
+}
+
+/* Disabled state */
+.portal-time-setting__picker-wrap .is-disabled .el-input__wrapper {
+  background-color: var(--color-background-page) !important;
+  cursor: not-allowed;
+}
+
+.portal-time-setting__picker-wrap .is-disabled .el-input__inner { color: var(--color-text-disabled); }
+.portal-time-setting__picker-wrap .is-disabled .el-input__suffix { background-color: var(--color-text-disabled); }
+
+/* Width override: standard time group uses wider picker (90px) */
+.portal-time-setting__time-group .portal-time-setting__picker-wrap .el-date-editor {
+  --el-date-editor-width: 90px;
+  width: 90px !important;
+}

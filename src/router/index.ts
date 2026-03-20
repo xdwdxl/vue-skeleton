@@ -4,101 +4,83 @@
  */
 import { createRouter, createWebHistory } from 'vue-router'
 import { API } from '../api'
-import { unwrapBffData } from '../http/api'
-import { isAdminGroup } from '../perm/utils'
 
-const RemoteLoading = () => import('../pages/RemoteLoading.vue')
-const PermAdmin = () => import('../pages/PermAdmin.vue')
-const Landing = () => import('../pages/Landing.vue')
-const Settings = () => import('../pages/Settings.vue')
-
+const BuilderPage = () => import('../builder/BuilderPage.vue')
+const RemoteLoading = () => import('../pages/dashboard/index.vue')
+const Left = () => import('../pages/left/index.vue')
+const Right = () => import('../pages/right/index.vue')
+const SelectList = () => import('../pages/select/list.vue')
+const LoginPage = () => import('../pages/LoginPage.vue')
+const RegisterPage = () => import('../pages/RegisterPage.vue')
 const ROUTES = {
-  loadtest: '/loadtest',
   dashboard: '/dashboard',
-  helpdesk: '/dashboard/helpdesk',
-  invoices: '/dashboard/invoices',
-  agiles: '/dashboard/agiles',
-  permAdmin: '/admin/perm',
-  settings: '/settings',
+  left: '/left',
+  right: '/right',
+  select: '/select',
+  selectList: '/select/list',
+  login: '/login',
+  register: '/register',
 } as const
 
 const routes = [
-  { path: '/', name: 'landing', component: Landing },
-  { path: ROUTES.loadtest, name: 'remote-loadtest', component: RemoteLoading },
-  { path: ROUTES.dashboard, name: 'remote-dashboard', component: RemoteLoading },
-  { path: ROUTES.helpdesk, name: 'remote-helpdesk', component: RemoteLoading },
-  { path: ROUTES.invoices, name: 'remote-invoices', component: RemoteLoading },
-  { path: ROUTES.agiles, name: 'remote-agiles', component: RemoteLoading },
-  { path: ROUTES.permAdmin, name: 'perm-admin', component: PermAdmin },
-  { path: ROUTES.settings, name: 'settings', component: Settings },
+  { path: '/', redirect: '/login' },
+  {
+    path: ROUTES.dashboard,
+    name: 'dashboard',
+    component: RemoteLoading,
+    meta: { title: 'shell.menu.dashboard', icon: 'dashboard', order: 0 },
+  },
+  {
+    path: ROUTES.left,
+    name: 'left',
+    component: Left,
+    meta: { title: 'shell.menu.left', icon: 'form', order: 30 },
+  },
+  {
+    path: ROUTES.right,
+    name: 'right',
+    component: Right,
+    meta: { title: 'shell.menu.right', icon: 'form', order: 0, position: 'right' },
+  },
+  {
+    path: ROUTES.select,
+    name: 'select',
+    redirect: ROUTES.selectList,
+    meta: { title: 'shell.menu.select', icon: 'form', order: 40, alwaysShow: true },
+  },
+  {
+    path: ROUTES.selectList,
+    name: 'select-list',
+    component: SelectList,
+    meta: { title: 'shell.menu.select_list', icon: 'form', parentMenu: 'select' },
+  },
+  { path: ROUTES.login, name: 'login', component: LoginPage, meta: { hidden: true } },
+  { path: ROUTES.register, name: 'register', component: RegisterPage, meta: { hidden: true } },
+  {
+    path: '/builder/:path(.*)',
+    name: 'builder-preview',
+    component: BuilderPage,
+    meta: { hidden: true, title: 'Builder.io Preview' },
+  },
 ]
+
+/** Ensure user is authenticated, attempting silent init if needed */
+async function ensureAuth(): Promise<boolean> {
+  if (API.AuthSubject()) return true
+  try {
+    return await API.AuthInit()
+  } catch {
+    return false
+  }
+}
 
 export function createPortalRouter(base?: string) {
   const router = createRouter({ history: createWebHistory(base), routes })
 
-  router.beforeEach(async (to, from, next) => {
-    if (to.path === '/') {
-      if (API.AuthSubject()) {
-        next(ROUTES.dashboard)
-        return
-      }
-      try {
-        const ok = await API.AuthInit()
-        if (ok) {
-          next(ROUTES.dashboard)
-          return
-        }
-      } catch {}
-      next()
-      return
-    }
-
-    const isRemote = to.path === ROUTES.loadtest || to.path.startsWith(ROUTES.dashboard)
-    const isPermAdmin = to.path === ROUTES.permAdmin
-    const isSettings = to.path === ROUTES.settings
-    const isAdminRoute = isPermAdmin || isSettings
-
-    if (isRemote || isAdminRoute) {
-      if (API.AuthSubject()) {
-        if (!isAdminRoute) {
-          next()
-          return
-        }
-        try {
-          const me = await API.PermMe()
-          const groups = unwrapBffData<any>(me)?.groups
-          if (isAdminGroup(groups)) {
-            next()
-          } else {
-            next('/')
-          }
-        } catch {
-          next('/')
-        }
-        return
-      }
-      const ok = await API.AuthInit()
-      if (ok) {
-        if (!isAdminRoute) {
-          next()
-          return
-        }
-        try {
-          const me = await API.PermMe()
-          const groups = unwrapBffData<any>(me)?.groups
-          if (isAdminGroup(groups)) {
-            next()
-          } else {
-            next('/')
-          }
-        } catch {
-          next('/')
-        }
-      } else {
-        next('/')
-      }
-    } else {
-      next()
+  router.beforeEach(async (to) => {
+    // Login page: redirect authenticated users to dashboard
+    if (to.path === '/login') {
+      return (await ensureAuth()) ? ROUTES.dashboard : undefined
     }
   })
 

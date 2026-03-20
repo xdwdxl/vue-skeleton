@@ -1,0 +1,110 @@
+/*
+ * Shared auth card styles for Login / Register pages.
+ * Import in any page that uses the .auth-card layout.
+ */
+
+/* Page centering */
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--color-background-page);
+}
+
+/* Card shell */
+.auth-card {
+  width: 340px;
+  border: 1px solid var(--color-border-base);
+  border-radius: var(--radius-base);
+  overflow: hidden;
+  background-color: var(--color-background-base);
+  box-shadow: var(--shadow-base);
+}
+
+/* Header bar */
+.auth-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  padding: 0 var(--spacing-sm);
+  background-color: var(--color-secondary);
+}
+
+.auth-card__title {
+  font-family: var(--font-family-bold);
+  font-size: var(--font-size-micro);
+  font-weight: 700;
+  color: var(--color-white);
+  text-transform: uppercase;
+}
+
+.auth-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.auth-card__action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: var(--color-white);
+  cursor: pointer;
+  padding: 0;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.auth-card__action-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Body */
+.auth-card__body {
+  padding: var(--spacing-lg) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm-plus);
+}
+
+/* Label */
+.auth-card__label {
+  display: block;
+  font-family: var(--font-family-bold);
+  font-size: var(--font-size-micro);
+  font-weight: 700;
+  color: var(--color-text-title);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Checkbox row */
+.auth-card__checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-family: var(--font-family-regular);
+  font-size: var(--font-size-micro);
+  color: var(--color-text-title);
+  cursor: pointer;
+}
+
+.auth-card__checkbox input[type="checkbox"] {
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+/* Full-width PortalButton override */
+.auth-card__body .portal-button-container {
+  width: 100%;
+}
+
+.auth-card__body .portal-button {
+  width: 100%;
+  min-width: unset;
+}

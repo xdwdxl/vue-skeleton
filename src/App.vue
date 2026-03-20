@@ -5,9 +5,12 @@
   @description Provides navigation and renders remote child routes
 -->
 <template>
-  <PortalShell />
+  <template v-if="$route.meta.hidden">
+    <router-view />
+  </template>
+  <PortalShell v-else />
 </template>
 
 <script setup lang="ts">
-import PortalShell from './shell/PortalShell.vue'
+  import PortalShell from './shell/PortalShell.vue'
 </script>

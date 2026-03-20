@@ -1,5 +1,5 @@
 /**
- * Storage types for CIDS Portal
+ * Storage types for Vue Skeleton
  * @author Lorin Luo
  * @description Defines storage driver and manager contracts
  */

@@ -32,10 +32,17 @@ export const I18nPlugin: Plugin = {
 // Composition API helper
 import { inject } from 'vue'
 
-export function useI18n(): I18nInstance {
+export function useI18n() {
   const i18n = inject<I18nInstance | null>('i18n', null)
   if (!i18n) {
     throw new Error('I18n not provided! Ensure I18nPlugin is installed.')
   }
-  return i18n
+  return {
+    t: (key: string, params?: Record<string, unknown>) => i18n.t(key, params),
+    setLocale: (locale: string) => i18n.setLocale(locale),
+    getLocale: () => i18n.getLocale(),
+    loadLocale: (locale: string) => i18n.loadLocale(locale),
+    get locale() { return i18n.locale },
+    set locale(v: string) { i18n.locale = v },
+  }
 }

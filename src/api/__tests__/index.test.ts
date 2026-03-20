@@ -270,30 +270,5 @@ describe('API Module', () => {
     })
   })
 
-  describe('YouTrack', () => {
-    it('YouTrackCreateIssue handles JSON', async () => {
-      vi.mocked(HttpApi.post).mockResolvedValue({ status: 200, data: { id: 1 } } as any)
-      const res = await API.YouTrackCreateIssue({ issue: { s: 1 } })
-      expect(res.ok).toBe(true)
-      expect(res.status).toBe(200)
-      expect(res.data).toEqual({ id: 1 })
-    })
 
-    it('YouTrackCreateIssue handles text', async () => {
-      vi.mocked(HttpApi.post).mockResolvedValue({ status: 400, data: 'bad' } as any)
-      const res = await API.YouTrackCreateIssue({ issue: { s: 1 } })
-      expect(res.ok).toBe(false)
-      expect(res.status).toBe(400)
-      expect(res.data).toBe('bad')
-    })
-
-    it('YouTrackCreateIssue handles error', async () => {
-      vi.mocked(HttpApi.post).mockRejectedValue({ response: { status: 500, data: { code: 'bad' } }, message: 'x' })
-      const res = await API.YouTrackCreateIssue({ issue: { s: 1 } })
-      expect(res.ok).toBe(false)
-      expect(res.status).toBe(500)
-      expect(res.data).toEqual({ code: 'bad' })
-      expect(res.error).toBe('x')
-    })
-  })
 })

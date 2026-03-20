@@ -1,7 +1,13 @@
+<!--
+  @file FormDialog.vue - Dialog wrapper with native form submission
+  @author Cooper Wang
+  @date 2026-03-13
+  @description Combines BaseDialog with native form, providing submit handling, scroll-to-error, and form reset on open
+-->
 <template>
   <BaseDialog
     v-model="visible"
-    v-bind="mergedDialogProps"
+    v-bind="{ ...mergedDialogProps, ...$attrs }"
     :disabled="disabled"
     :confirm-loading="isSubmitting"
     :close-after-confirm="false"
@@ -11,16 +17,9 @@
   >
     <template v-if="$slots.header" #header><slot name="header" /></template>
     <div ref="bodyRef" class="form-dialog__body">
-      <FormKit
-        :id="effectiveFormId"
-        type="form"
-        :actions="false"
-        :disabled="disabled || isSubmitting"
-        v-model="valueProxy"
-        @submit="handleSubmit"
-      >
+      <form :id="effectiveFormId" @submit.prevent="handleSubmit(valueProxy)">
         <slot :value="valueProxy" />
-      </FormKit>
+      </form>
     </div>
     <template v-if="$slots.footer" #footer><slot name="footer" /></template>
   </BaseDialog>
@@ -28,9 +27,9 @@
 
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import { FormKit } from '@formkit/vue'
-import { getNode } from '@formkit/core'
 import BaseDialog from './BaseDialog.vue'
+
+defineOptions({ inheritAttrs: false })
 
 type AnyRecord = Record<string, unknown>
 type SubmitHandler = (values: AnyRecord) => void | boolean | Promise<void | boolean>
@@ -60,25 +59,23 @@ const props = withDefaults(defineProps<{
   dialogProps?: Record<string, unknown>
   disabled?: boolean
   loading?: boolean
-  submitOnEnter?: boolean
   closeAfterSubmit?: boolean
   resetOnOpen?: boolean
   scrollToError?: boolean
   onSubmit?: SubmitHandler
 }>(), {
   disabled: false,
-  submitOnEnter: true,
   closeAfterSubmit: true,
   resetOnOpen: false,
   scrollToError: true,
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-  (e: 'update:formValue', value: AnyRecord): void
-  (e: 'submit', value: AnyRecord): void
-  (e: 'opened'): void
-  (e: 'closed'): void
+  'update:modelValue': [value: boolean]
+  'update:formValue': [value: AnyRecord]
+  submit: [value: AnyRecord]
+  opened: []
+  closed: []
 }>()
 
 const visible = computed({
@@ -98,26 +95,34 @@ const bodyRef = ref<HTMLDivElement | null>(null)
 const submitting = ref(false)
 const isSubmitting = computed(() => props.loading ?? submitting.value)
 
+/**
+ * Scroll to the first validation error and focus its field
+ * @author Cooper Wang
+ */
 function scrollToFirstError() {
   if (!props.scrollToError) return
-  const root = bodyRef.value
-  const el = root?.querySelector<HTMLElement>('.fk-message, .formkit-message')
+  const el = bodyRef.value?.querySelector<HTMLElement>('[data-error], .is-error, .el-form-item.is-error')
   if (!el) return
   try { el.scrollIntoView({ block: 'center', inline: 'nearest' }) } catch {}
   try {
-    const field = el.closest<HTMLElement>('.formkit-outer, .formkit-wrapper, .formkit-field, .formkit-input')
-    field?.querySelector<HTMLElement>('input, textarea, select, button, [tabindex]')?.focus?.()
+    el.querySelector<HTMLElement>('input, textarea, select, [tabindex]')?.focus?.()
   } catch {}
 }
 
+/**
+ * Trigger native form submission via dialog confirm button
+ * @author Cooper Wang
+ */
 async function handleConfirm() {
-  const node = getNode(effectiveFormId.value)
-  try { node?.submit() } catch {}
-  await nextTick()
-  const valid = (node as any)?.context?.state?.valid
-  if (valid === false) scrollToFirstError()
+  const form = bodyRef.value?.querySelector<HTMLFormElement>('form')
+  if (form) form.requestSubmit()
 }
 
+/**
+ * Handle form submission with loading state management
+ * @author Cooper Wang
+ * @param {AnyRecord} values - Form field values
+ */
 async function handleSubmit(values: AnyRecord) {
   if (submitting.value) return
   emit('submit', values)
@@ -128,19 +133,22 @@ async function handleSubmit(values: AnyRecord) {
   submitting.value = true
   try {
     const res = await props.onSubmit(values)
-    if (res === false) return
+    if (res === false) {
+      await nextTick()
+      scrollToFirstError()
+      return
+    }
     if (props.closeAfterSubmit) visible.value = false
   } finally {
     submitting.value = false
   }
 }
 
-// Enter 提交已由 BaseDialog 统一处理
-
 watch(() => props.modelValue, async (open) => {
   if (!open || !props.resetOnOpen) return
   await nextTick()
-  try { getNode(effectiveFormId.value)?.reset() } catch {}
+  const form = bodyRef.value?.querySelector<HTMLFormElement>('form')
+  form?.reset()
 })
 </script>
 
